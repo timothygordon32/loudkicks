@@ -1,11 +1,15 @@
 package org.loudkicks
 
-import org.scalatest.WordSpecLike
+import org.scalatest.{Matchers, WordSpecLike}
 
-class ConsoleSpec extends WordSpecLike {
+class ConsoleSpec extends WordSpecLike with Matchers {
 
   "Console" should {
 
-    "ignore input" in pending
+    "ignore any input when it knows no commands" in {
+      val console = new Console {}
+
+      console parse "anything" shouldBe Seq.empty
+    }
   }
 }
