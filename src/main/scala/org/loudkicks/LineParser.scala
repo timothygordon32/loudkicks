@@ -9,3 +9,7 @@ trait LineParser {
 object NullLineParser extends LineParser {
   def parse(line: String) = Response(Seq.empty)
 }
+
+object EchoParser extends LineParser {
+  def parse(line: String) = Response(Seq(s"Echo: $line"))
+}

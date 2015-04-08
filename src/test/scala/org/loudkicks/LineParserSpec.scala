@@ -10,4 +10,11 @@ class LineParserSpec extends WordSpec with Matchers {
       NullLineParser parse "anything" shouldBe Response(Seq.empty)
     }
   }
+
+  "EchoParser" should {
+
+    "echo back the input" in {
+      EchoParser parse "anything" shouldBe Response(Seq("Echo: anything"))
+    }
+  }
 }
