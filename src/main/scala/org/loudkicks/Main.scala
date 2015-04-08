@@ -4,12 +4,11 @@ import java.io.PrintWriter
 
 import scala.io.Source
 
-object Main extends App with ConsoleApp {
+object Main extends App with ConsoleApp with ConsoleParser {
   val prompt = "> "
   val input = Source.stdin.getLines()
   val output = new PrintWriter(System.out, true)
-
-  def parse(line: String) = EchoParser parse line
+  val commands = Seq(Echo)
 
   run()
 }

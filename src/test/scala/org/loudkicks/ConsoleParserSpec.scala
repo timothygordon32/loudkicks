@@ -2,19 +2,6 @@ package org.loudkicks
 
 import org.scalatest.{Matchers, WordSpec}
 
-trait Command {
-  def parse(line: String): Option[Response]
-}
-
-trait ConsoleParser extends LineParser {
-  def commands: Seq[Command]
-
-  def parse(line: String) =
-    commands.foldLeft[Option[Response]](None) { (result, command) =>
-      result orElse command.parse(line)
-    } getOrElse Empty
-}
-
 class ConsoleParserSpec extends WordSpec with Matchers {
 
   object IgnoringCommand extends Command {
