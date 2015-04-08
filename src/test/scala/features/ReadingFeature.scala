@@ -14,7 +14,7 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
     scenario("Alice reads her own single posted message") {
       new WithApp {
         Given("Alice has posted 'I love the weather today'")
-        app.parse("Alice -> I love the weather today") should be (Response(Seq.empty))
+        app.parse("Alice -> I love the weather today") should be(Response(Seq.empty))
 
         When("Alice's time line is read")
         val timeLine = app.parse("Alice")
@@ -27,10 +27,21 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
 
   trait WithApp {
     val app = new LineParser {
-      def parse(line: String):Response = line match {
-        case s if s.contains("->") => Response(Seq.empty)
-        case "Alice" => Response(Seq("I love the weather today"))
+      def parsePost(line: String): Option[Response] = line match {
+        case s if s.contains("->") => Some(Response(Seq.empty))
+        case _ => None
       }
+
+      def parseRead(line: String): Option[Response] = line match {
+        case "Alice" => Some(Response(Seq("I love the weather today")))
+        case _ => None
+      }
+
+      def parse(line: String): Response =
+        parsePost(line) orElse
+          parseRead(line) getOrElse
+          Response(Seq.empty)
     }
   }
+
 }
