@@ -1,8 +1,6 @@
 package org.loudkicks
 
-import org.scalatest.{Matchers, WordSpec}
-
-class ConsoleParserSpec extends WordSpec with Matchers {
+class ConsoleParserSpec extends UnitSpec {
 
   object IgnoringCommand extends Command {
     def parse(line: String) = None

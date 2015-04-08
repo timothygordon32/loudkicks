@@ -1,10 +1,8 @@
 package org.loudkicks
 
-import java.io.{PrintWriter, ByteArrayOutputStream, PrintStream}
+import java.io.{ByteArrayOutputStream, PrintStream, PrintWriter}
 
-import org.scalatest.{Matchers, WordSpec}
-
-class ConsoleAppSpec extends WordSpec with Matchers {
+class ConsoleAppSpec extends UnitSpec {
 
   "ConsoleApp" should {
 

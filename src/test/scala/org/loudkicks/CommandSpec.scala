@@ -1,8 +1,6 @@
 package org.loudkicks
 
-import org.scalatest.{Inside, Matchers, WordSpec}
-
-class CommandSpec extends WordSpec with Matchers with Inside {
+class CommandSpec extends UnitSpec {
 
   "Echo" when {
     "parsing 'anything'" should {
