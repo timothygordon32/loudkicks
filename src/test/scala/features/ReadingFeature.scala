@@ -11,7 +11,7 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
 
   feature("Read a user's time line") {
 
-    scenario("Read a time line for a user who has posted a single message") {
+    scenario("Alice reads her own single posted message") {
       new WithApp {
         Given("Alice has posted 'I love the weather today'")
         app.parse("Alice -> I love the weather today") should be (Response(Seq.empty))
