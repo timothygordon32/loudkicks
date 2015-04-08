@@ -7,7 +7,7 @@ class LineParserSpec extends WordSpec with Matchers with Inside {
   "NullLineParser" when {
     "parsing 'anything'" should {
       "have an empty response" in {
-        NullLineParser parse "anything" should be (Response(Seq.empty))
+        NullLineParser parse "anything" should be(Empty)
       }
     }
   }
@@ -15,9 +15,9 @@ class LineParserSpec extends WordSpec with Matchers with Inside {
   "EchoParser" when {
     "parsing 'anything'" should {
       "echo back a line containing 'anything'" in {
-        inside(EchoParser parse "anything") { case Response(lines) =>
+        inside(EchoParser parse "anything") { case Lines(lines) =>
           lines should have size 1
-          exactly(1, lines) should include ("anything")
+          exactly(1, lines) should include("anything")
         }
       }
     }

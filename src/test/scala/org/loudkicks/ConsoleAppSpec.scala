@@ -15,7 +15,7 @@ class ConsoleAppSpec extends WordSpec with Matchers {
         val output = new PrintWriter(new PrintStream(outputCapture))
         val input = Seq("anything").toIterator
 
-        def parse(line: String) = Response(Seq.empty)
+        def parse(line: String) = Empty
       }
 
       app.run()
@@ -29,7 +29,7 @@ class ConsoleAppSpec extends WordSpec with Matchers {
         val prompt = ""
         val output = new PrintWriter(new PrintStream(outputCapture))
         val input = Seq("anything").toIterator
-        def parse(line: String) = Response(Seq("Output line 1", "Output line 2"))
+        def parse(line: String) = Lines(Seq("Output line 1", "Output line 2"))
       }
 
       app.run()

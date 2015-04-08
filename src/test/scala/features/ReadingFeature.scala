@@ -1,6 +1,6 @@
 package features
 
-import org.loudkicks.{LineParser, Response}
+import org.loudkicks.{Lines, Empty, LineParser, Response}
 import org.scalatest.{FeatureSpec, GivenWhenThen, Matchers}
 
 class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
@@ -14,7 +14,7 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
     scenario("Alice reads her own single posted message") {
       new WithApp {
         Given("Alice has posted 'I love the weather today'")
-        app.parse("Alice -> I love the weather today") should be(Response(Seq.empty))
+        app.parse("Alice -> I love the weather today") should be(Empty)
 
         When("Alice's time line is read")
         val timeLine = app.parse("Alice")
@@ -28,20 +28,19 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
   trait WithApp {
     val app = new LineParser {
       def parsePost(line: String): Option[Response] = line match {
-        case s if s.contains("->") => Some(Response(Seq.empty))
+        case s if s.contains("->") => Some(Empty)
         case _ => None
       }
 
       def parseRead(line: String): Option[Response] = line match {
-        case "Alice" => Some(Response(Seq("I love the weather today")))
+        case "Alice" => Some(Lines(Seq("I love the weather today")))
         case _ => None
       }
 
       def parse(line: String): Response =
         parsePost(line) orElse
           parseRead(line) getOrElse
-          Response(Seq.empty)
+          Empty
     }
   }
-
 }

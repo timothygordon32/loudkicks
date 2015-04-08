@@ -4,9 +4,12 @@ import java.io.PrintWriter
 
 trait ConsoleApp {
   def prompt: String
+
   def output: PrintWriter
+
   def input: Iterator[String]
-  def parse(line: String):Response
+
+  def parse(line: String): Response
 
   def ready() = {
     output.print(prompt)

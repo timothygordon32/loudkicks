@@ -9,7 +9,7 @@ object Main extends App with ConsoleApp {
   val input = Source.stdin.getLines()
   val output = new PrintWriter(System.out, true)
 
-  def parse(line: String) = EchoParser.parse(line)
+  def parse(line: String) = EchoParser parse line
 
   run()
 }

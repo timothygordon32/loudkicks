@@ -11,16 +11,16 @@ object IgnoringCommand extends Command {
 }
 
 object AcceptingCommand extends Command {
-  def parse(line: String) = Some(Response(Seq("accepted")))
+  def parse(line: String) = Some(Lines(Seq("accepted")))
 }
 
 trait ConsoleParser extends LineParser {
   def commands: Seq[Command]
 
-  def parse(line: String): Response =
+  def parse(line: String) =
     commands.foldLeft[Option[Response]](None) { (result, command) =>
       result orElse command.parse(line)
-    } getOrElse Response(Seq.empty)
+    } getOrElse Empty
 }
 
 class ConsoleParserSpec extends WordSpec with Matchers {
@@ -30,7 +30,7 @@ class ConsoleParserSpec extends WordSpec with Matchers {
       "return empty response" in new ConsoleParser {
         val commands = Seq.empty
 
-        parse("anything") should be(Response(Seq.empty))
+        parse("anything") should be(Empty)
       }
     }
 
@@ -38,7 +38,7 @@ class ConsoleParserSpec extends WordSpec with Matchers {
       "return an empty response" in new ConsoleParser {
         val commands = Seq(IgnoringCommand)
 
-        parse("anything") should be(Response(Seq.empty))
+        parse("anything") should be(Empty)
       }
     }
 
@@ -46,13 +46,13 @@ class ConsoleParserSpec extends WordSpec with Matchers {
       "return the response of the only accepting command" in new ConsoleParser {
         val commands = Seq(AcceptingCommand)
 
-        parse("anything") should be(Response(Seq("accepted")))
+        parse("anything") should be(Lines(Seq("accepted")))
       }
 
       "return the response of the first accepting command" in new ConsoleParser {
         val commands = Seq(IgnoringCommand, AcceptingCommand)
 
-        parse("anything") should be(Response(Seq("accepted")))
+        parse("anything") should be(Lines(Seq("accepted")))
       }
     }
   }
