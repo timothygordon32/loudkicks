@@ -8,7 +8,7 @@ class ConsoleAppSpec extends WordSpec with Matchers {
 
   "ConsoleApp" should {
 
-    "output a prompt" in {
+    "output a prompt each time app is ready for input" in {
       val outputCapture = new ByteArrayOutputStream()
       val app = new ConsoleApp {
         val prompt = "> "
