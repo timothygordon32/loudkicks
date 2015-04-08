@@ -26,21 +26,20 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
   }
 
   trait WithApp {
-    val app = new LineParser {
-      def parsePost(line: String): Option[Response] = line match {
-        case s if s.contains("->") => Some(Posted)
-        case _ => None
-      }
-
-      def parseRead(line: String): Option[Response] = line match {
-        case "Alice" => Some(Lines(Seq("I love the weather today")))
-        case _ => None
-      }
-
-      def parse(line: String): Response =
-        parsePost(line) orElse
-          parseRead(line) getOrElse
-          Empty
+    val app = new ConsoleParser {
+      val commands = Seq(
+        new Command {
+          def parse(line: String) = line match {
+            case s if s.contains("->") => Some(Posted)
+            case _ => None
+          }
+        },
+        new Command {
+          def parse(line: String) = line match {
+            case "Alice" => Some(Lines(Seq("I love the weather today")))
+            case _ => None
+          }
+        })
     }
   }
 }

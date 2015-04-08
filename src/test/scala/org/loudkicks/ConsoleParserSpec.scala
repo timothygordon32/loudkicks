@@ -6,14 +6,6 @@ trait Command {
   def parse(line: String): Option[Response]
 }
 
-object IgnoringCommand extends Command {
-  def parse(line: String) = None
-}
-
-object AcceptingCommand extends Command {
-  def parse(line: String) = Some(Lines(Seq("accepted")))
-}
-
 trait ConsoleParser extends LineParser {
   def commands: Seq[Command]
 
@@ -24,6 +16,14 @@ trait ConsoleParser extends LineParser {
 }
 
 class ConsoleParserSpec extends WordSpec with Matchers {
+
+  object IgnoringCommand extends Command {
+    def parse(line: String) = None
+  }
+
+  object AcceptingCommand extends Command {
+    def parse(line: String) = Some(Lines(Seq("accepted")))
+  }
 
   "ConsoleParser" when {
     "without any commands" should {
