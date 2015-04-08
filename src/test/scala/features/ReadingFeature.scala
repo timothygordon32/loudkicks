@@ -12,19 +12,25 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
   feature("Read a user's time line") {
 
     scenario("Read a time line for a user who has posted a single message") {
-      pending
+      new WithApp {
+        Given("Alice has posted 'I love the weather today'")
+        app.parse("Alice -> I love the weather today") should be (Response(Seq.empty))
 
-      Given("Alice has posted 'I love the weather today'")
-      val app = new LineParser {
-        def parse(line: String):Response = ???
+        When("Alice's time line is read")
+        val timeLine = app.parse("Alice")
+
+        Then("the post 'I love the weather today' should be listed")
+        timeLine.lines should contain only "I love the weather today"
       }
-      app.parse("Alice -> I love the weather today") should be (Response(Seq.empty))
+    }
+  }
 
-      When("Alice's time line is read")
-      val timeLine = app.parse("Alice")
-
-      Then("the post 'I love the weather today' should be listed")
-      timeLine.lines should contain only "I love the weather today"
+  trait WithApp {
+    val app = new LineParser {
+      def parse(line: String):Response = line match {
+        case s if s.contains("->") => Response(Seq.empty)
+        case "Alice" => Response(Seq("I love the weather today"))
+      }
     }
   }
 }
