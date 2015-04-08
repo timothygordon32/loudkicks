@@ -16,3 +16,9 @@ object Post extends Command {
     case _ => None
   }
 }
+
+trait Read extends Command {
+  def posts(user: User): Seq[Posting]
+
+  def parse(line: String) = Some(Lines(posts(User(line)).map(_.message.text)))
+}
