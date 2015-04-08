@@ -20,7 +20,7 @@ class ConsoleAppSpec extends WordSpec with Matchers {
 
       app.run()
 
-      outputCapture.toString shouldBe "> > "
+      outputCapture.toString should be ("> > ")
     }
 
     "output response from parsed input" in {
@@ -34,7 +34,7 @@ class ConsoleAppSpec extends WordSpec with Matchers {
 
       app.run()
 
-      outputCapture.toString shouldBe
+      outputCapture.toString should be
         """Output line 1
           |Output line 2
           |""".stripMargin
