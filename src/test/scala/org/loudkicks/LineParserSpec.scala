@@ -4,14 +4,6 @@ import org.scalatest.{Inside, WordSpec, Matchers}
 
 class LineParserSpec extends WordSpec with Matchers with Inside {
 
-  "NullLineParser" when {
-    "parsing 'anything'" should {
-      "have an empty response" in {
-        NullLineParser parse "anything" should be(Empty)
-      }
-    }
-  }
-
   "EchoParser" when {
     "parsing 'anything'" should {
       "echo back a line containing 'anything'" in {
