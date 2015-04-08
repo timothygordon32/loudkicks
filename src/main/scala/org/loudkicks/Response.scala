@@ -6,10 +6,10 @@ sealed trait Response {
 
 case class Lines(lines: Seq[String]) extends Response
 
-trait EmptyResponse extends Response {
+trait Empty extends Response {
   val lines = Seq.empty
 }
 
-case object Empty extends EmptyResponse
+case object Empty extends Empty
 
-case object Posted extends EmptyResponse
+case class Posted(user: User, message: Message) extends Empty
