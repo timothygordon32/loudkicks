@@ -8,7 +8,7 @@ object Echo extends Command {
   def parse(line: String) = Some(Lines(Seq(s"Echo: $line")))
 }
 
-object Post extends Command {
+object Publish extends Command {
   val valid = "^(.*) -> (.*)$".r
 
   def parse(line: String) = line match {

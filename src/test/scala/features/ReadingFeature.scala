@@ -29,7 +29,7 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
   trait WithApp {
     val app = new ConsoleParser {
       val commands = Seq(
-        Post,
+        Publish,
         new Command {
           def parse(line: String) = line match {
             case "Alice" => Some(Lines(Seq("I love the weather today")))
