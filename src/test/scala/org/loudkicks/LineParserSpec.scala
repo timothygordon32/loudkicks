@@ -1,20 +1,25 @@
 package org.loudkicks
 
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.{Inside, WordSpec, Matchers}
 
-class LineParserSpec extends WordSpec with Matchers {
+class LineParserSpec extends WordSpec with Matchers with Inside {
 
-  "NullLineParser" should {
-
-    "ignore any input when it does not know how to parse anything" in {
-      NullLineParser parse "anything" should be (Response(Seq.empty))
+  "NullLineParser" when {
+    "parsing 'anything'" should {
+      "have an empty response" in {
+        NullLineParser parse "anything" should be (Response(Seq.empty))
+      }
     }
   }
 
-  "EchoParser" should {
-
-    "echo back the input" in {
-      EchoParser parse "anything" should be (Response(Seq("Echo: anything")))
+  "EchoParser" when {
+    "parsing 'anything'" should {
+      "echo back a line containing 'anything'" in {
+        inside(EchoParser parse "anything") { case Response(lines) =>
+          lines should have size 1
+          exactly(1, lines) should include ("anything")
+        }
+      }
     }
   }
 }
