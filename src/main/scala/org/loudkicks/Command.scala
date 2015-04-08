@@ -18,7 +18,7 @@ object Publish extends Command {
 }
 
 trait Read extends Command {
-  def posts(user: User): Seq[Posting]
+  def posts(user: User): Seq[Post]
 
   def parse(line: String) = Some(Lines(posts(User(line)).map(_.message.text)))
 }

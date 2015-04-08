@@ -1,10 +1,10 @@
 package org.loudkicks
 
-class PostSpec extends UnitSpec {
+class PublishSpec extends UnitSpec {
 
-  "Post" when {
+  "Publish" when {
     "parsing a valid command line" should {
-      "respond with a post for that user name and message" in {
+      "return a posted response for that user name and message" in {
         Publish parse "Alice -> I love the weather today" should
           contain(Posted(User("Alice"), Message("I love the weather today")))
       }
