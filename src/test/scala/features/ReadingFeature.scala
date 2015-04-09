@@ -15,7 +15,7 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
       new WithApp {
         Given("Alice has posted 'I love the weather today'")
         app.parse("Alice -> I love the weather today") should
-          be(Posted(User("Alice"), Message("I love the weather today")))
+          be(Posted(Post(User("Alice"), Message("I love the weather today"))))
 
         When("Alice's time line is read")
         val timeLine = app.parse("Alice")
@@ -27,14 +27,26 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
   }
 
   trait WithApp {
+    object Posts {
+      private var forUser: Map[User, Seq[Post]] = Map.empty.withDefaultValue(Seq.empty)
+
+      def save(user: User, message: Message): Post = {
+        val post = Post(user, message)
+        val postsForUser = posts(user) :+ post
+        forUser = forUser + (user -> postsForUser)
+        post
+      }
+
+      def posts(user: User) = forUser(user)
+    }
+
     val app = new ConsoleParser {
       val commands = Seq(
-        Publish,
-        new Command {
-          def parse(line: String) = line match {
-            case "Alice" => Some(Lines(Seq("I love the weather today")))
-            case _ => None
-          }
+        new Publish {
+          def save(user: User, message: Message) = Posts.save(user, message)
+        },
+        new Read {
+          def posts(user: User) = Posts.posts(user)
         })
     }
   }

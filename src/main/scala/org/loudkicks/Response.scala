@@ -12,4 +12,4 @@ trait Empty extends Response {
 
 case object Empty extends Empty
 
-case class Posted(user: User, message: Message) extends Empty
+case class Posted(post: Post) extends Empty
