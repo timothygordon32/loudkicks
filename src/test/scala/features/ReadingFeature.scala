@@ -21,32 +21,14 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
         val timeLine = app.parse("Alice")
 
         Then("the post 'I love the weather today' should be listed")
-        timeLine.lines should contain only "I love the weather today"
+        timeLine.lines should contain ("I love the weather today")
       }
     }
   }
 
   trait WithApp {
-    object InMemoryTimeLines extends TimeLines {
-      private var forUser: Map[User, List[Post]] = Map.empty.withDefaultValue(List.empty)
-
-      def post(user: User, message: Message): Post = {
-        val postsForUser = Post(user, message) :: read(user)
-        forUser = forUser + (user -> postsForUser)
-        read(user).head
-      }
-
-      def read(user: User) = forUser(user)
-    }
-
-    val app = new ConsoleParser {
-      val commands = Seq(
-        new Publish {
-          val timeLines = InMemoryTimeLines
-        },
-        new Read {
-          def timeLines = InMemoryTimeLines
-        })
+    val app = new ConsoleParser with AllCommands {
+      lazy val timeLines = InMemoryTimeLines()
     }
   }
 }
