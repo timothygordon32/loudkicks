@@ -6,7 +6,7 @@ class ReadSpec extends UnitSpec {
     "parsing an unknown user" should {
 
       val read = new Read {
-        def posts(user: User): Seq[Post] = {
+        def timeLine(user: User): Seq[Post] = {
           user should be(User("Zed"))
           Seq.empty
         }
@@ -23,7 +23,7 @@ class ReadSpec extends UnitSpec {
       val bob = User("Bob")
 
       val read = new Read {
-        def posts(user: User): Seq[Post] = {
+        def timeLine(user: User): Seq[Post] = {
           user should be(bob)
           Seq(
             Post(bob, Message("Good game, though.")),

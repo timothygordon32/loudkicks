@@ -27,26 +27,25 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
   }
 
   trait WithApp {
-    object Posts {
-      private var forUser: Map[User, Seq[Post]] = Map.empty.withDefaultValue(Seq.empty)
+    object InMemoryTimeLines extends TimeLines {
+      private var forUser: Map[User, List[Post]] = Map.empty.withDefaultValue(List.empty)
 
-      def save(user: User, message: Message): Post = {
-        val post = Post(user, message)
-        val postsForUser = posts(user) :+ post
+      def post(user: User, message: Message): Post = {
+        val postsForUser = Post(user, message) :: read(user)
         forUser = forUser + (user -> postsForUser)
-        post
+        read(user).head
       }
 
-      def posts(user: User) = forUser(user)
+      def read(user: User) = forUser(user)
     }
 
     val app = new ConsoleParser {
       val commands = Seq(
         new Publish {
-          def save(user: User, message: Message) = Posts.save(user, message)
+          val timeLines = InMemoryTimeLines
         },
         new Read {
-          def posts(user: User) = Posts.posts(user)
+          def timeLine(user: User) = InMemoryTimeLines.read(user)
         })
     }
   }

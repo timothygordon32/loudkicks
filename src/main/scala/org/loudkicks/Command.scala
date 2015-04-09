@@ -13,15 +13,17 @@ trait Publish extends Command {
 
   def parse(line: String) = line match {
     case valid(user, message) =>
-      Some(Posted(save(User(user), Message(message))))
+      Some(Posted(post(User(user), Message(message))))
     case _ => None
   }
 
-  def save(user: User, message:Message): Post
+  def timeLines: TimeLines
+
+  def post(user: User, message: Message) = timeLines.post(user, message)
 }
 
 trait Read extends Command {
-  def posts(user: User): Seq[Post]
+  def timeLine(user: User): Seq[Post]
 
-  def parse(line: String) = Some(Lines(posts(User(line)).map(_.message.text)))
+  def parse(line: String) = Some(Lines(timeLine(User(line)).map(_.message.text)))
 }

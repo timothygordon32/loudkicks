@@ -4,16 +4,19 @@ class PublishSpec extends UnitSpec {
 
   "Publish" when {
 
-
     "parsing a valid command line" should {
 
       var posts: Seq[Post] = Seq.empty
 
       val publish = new Publish {
-        def save(user: User, message: Message) = {
-          val post = Post(user, message)
-          posts = posts :+ post
-          post
+        val timeLines = new TimeLines {
+          def post(user: User, message: Message) = {
+            val post = Post(user, message)
+            posts = posts :+ post
+            post
+          }
+
+          def read(user: User) = fail("Time lines should not be read")
         }
       }
 
@@ -33,7 +36,7 @@ class PublishSpec extends UnitSpec {
     "parsing a invalid command line" should {
       "ignore it" in {
         val publish = new Publish {
-          def save(user: User, message: Message) = ???
+          def timeLines = fail("Time lines should not be accessed")
         }
 
         publish parse "Alice" should be(empty)
