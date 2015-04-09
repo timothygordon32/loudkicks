@@ -4,11 +4,12 @@ import java.io.PrintWriter
 
 import scala.io.Source
 
-object Main extends App with ConsoleApp with ConsoleParser {
+object Main extends App with ConsoleApp with ConsoleParser with AllCommands {
   val prompt = "> "
   val input = Source.stdin.getLines()
   val output = new PrintWriter(System.out, true)
-  val commands = Seq(Echo)
+
+  lazy val timeLines = InMemoryTimeLines()
 
   run()
 }
