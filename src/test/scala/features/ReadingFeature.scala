@@ -45,7 +45,7 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
           val timeLines = InMemoryTimeLines
         },
         new Read {
-          def timeLine(user: User) = InMemoryTimeLines.read(user)
+          def timeLines = InMemoryTimeLines
         })
     }
   }

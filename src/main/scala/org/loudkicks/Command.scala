@@ -23,7 +23,9 @@ trait Publish extends Command {
 }
 
 trait Read extends Command {
-  def timeLine(user: User): Seq[Post]
+  def timeLines: TimeLines
+
+  def timeLine(user: User): Seq[Post] = timeLines.read(user)
 
   def parse(line: String) = Some(Lines(timeLine(User(line)).map(_.message.text)))
 }
