@@ -29,6 +29,28 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
         timeLine.lines should contain ("I love the weather today (5 minutes ago)")
       }
     }
+
+    scenario("Bob reads his own two messages posted 2 minutes and 1 minute ago") {
+      new WithApp {
+        Given("Bob has posted 'Damn! We lost!' 2 minutes ago")
+        timeIs(inThePast(2.minutes))
+        app.parse("Bob -> Damn! We lost!") should
+          be(Posted(Post(User("Bob"), Message("Damn! We lost!"), inThePast(2.minutes))))
+        And("Bob has posted 'Good game though.' 1 minute ago")
+        timeIs(inThePast(1.minute))
+        app.parse("Bob -> Good game though.") should
+          be(Posted(Post(User("Bob"), Message("Good game though."), inThePast(1.minutes))))
+
+        When("Bob's time line is read")
+        timeIs(thePresent)
+        val timeLine = app.parse("Bob")
+
+        Then("the most recent post 'Good game though. (1 minute ago)' should be shown first")
+        timeLine.lines(0) should be("Good game though. (1 minute ago)")
+        And("the previous post 'Damn! We lost! (2 minutes ago)' should be shown next")
+        timeLine.lines(1) should be("Damn! We lost! (2 minutes ago)")
+      }
+    }
   }
 
   trait WithApp {
