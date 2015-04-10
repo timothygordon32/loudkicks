@@ -10,6 +10,7 @@ object Main extends App with ConsoleApp with ConsoleParser with AllCommands {
   val output = new PrintWriter(System.out, true)
 
   lazy val timeLines = InMemoryTimeLines()
+  lazy val timeSource = SystemTimeSource
 
   run()
 }

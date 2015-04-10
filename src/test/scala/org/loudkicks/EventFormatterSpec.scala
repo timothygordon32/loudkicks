@@ -1,9 +1,7 @@
 package org.loudkicks
 
 import com.github.nscala_time.time.Imports._
-import org.ocpsoft.prettytime.PrettyTime
-import org.ocpsoft.prettytime.units.JustNow
-import DateTimes._
+import org.loudkicks.DateTimes._
 
 class EventFormatterSpec extends UnitSpec {
 

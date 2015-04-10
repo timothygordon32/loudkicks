@@ -1,11 +1,16 @@
 package org.loudkicks
 
+import com.github.nscala_time.time.Imports._
+import org.joda.time.DateTime
+
 class ReadSpec extends UnitSpec {
 
   "Read" when {
     "parsing an unknown user" should {
 
       val read = new Read {
+        def timeSource = fail("Should not reference the time")
+
         val timeLines = new TimeLines {
           def post(user: User, message: Message) = fail("Should not make any posts")
 
@@ -25,16 +30,23 @@ class ReadSpec extends UnitSpec {
 
     "parsing an known user" should {
       val bob = User("Bob")
+      val present = new DateTime
+      val firstPostAt = present - 10.minute
+      val secondPostAt = present - 1.minute
 
       val read = new Read {
+        def timeSource = new TimeSource {
+          def now = present
+        }
+
         val timeLines = new TimeLines {
           def post(user: User, message: Message) = fail("Should not make any posts")
 
           def read(user: User) = {
             user should be(bob)
             Seq(
-              Post(bob, Message("Good game, though.")),
-              Post(bob, Message("Damn! We lost!"))
+              Post(bob, Message("Good game, though."), secondPostAt),
+              Post(bob, Message("Damn! We lost!"), firstPostAt)
             )
           }
         }
@@ -43,8 +55,8 @@ class ReadSpec extends UnitSpec {
       "respond with messages" in {
         inside(read parse "Bob") { case Some(Lines(lines)) =>
           lines should be(Seq(
-            "Good game, though.",
-            "Damn! We lost!"
+            "Good game, though. (1 minute ago)",
+            "Damn! We lost! (10 minutes ago)"
           ))
         }
       }

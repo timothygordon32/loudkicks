@@ -1,5 +1,7 @@
 package org.loudkicks
 
+import org.joda.time.DateTime
+
 class PublishSpec extends UnitSpec {
 
   "Publish" when {
@@ -8,10 +10,12 @@ class PublishSpec extends UnitSpec {
 
       var posts: Seq[Post] = Seq.empty
 
+      val postedAt = new DateTime
+
       val publish = new Publish {
         val timeLines = new TimeLines {
           def post(user: User, message: Message) = {
-            val post = Post(user, message)
+            val post = Post(user, message, postedAt)
             posts = posts :+ post
             post
           }
@@ -22,14 +26,14 @@ class PublishSpec extends UnitSpec {
 
       "return a posted response for that user name and message" in {
         publish parse "Alice -> I love the weather today" should
-          contain(Posted(Post(User("Alice"), Message("I love the weather today"))))
+          contain(Posted(Post(User("Alice"), Message("I love the weather today"), postedAt)))
       }
 
       "save the post" in {
 
         publish parse "Alice -> I love the weather today"
 
-        posts should contain (Post(User("Alice"), Message("I love the weather today")))
+        posts should contain (Post(User("Alice"), Message("I love the weather today"), postedAt))
       }
     }
 

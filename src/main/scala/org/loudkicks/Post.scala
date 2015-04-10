@@ -1,3 +1,5 @@
 package org.loudkicks
 
-case class Post(user: User, message: Message)
+import org.joda.time.DateTime
+
+case class Post(user: User, message: Message, when: DateTime)

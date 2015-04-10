@@ -1,5 +1,7 @@
 package org.loudkicks
 
+import org.joda.time.DateTime
+
 trait Command {
   def parse(line: String): Option[Response]
 }
@@ -23,9 +25,15 @@ trait Publish extends Command {
 }
 
 trait Read extends Command {
+  def timeSource: TimeSource
+
   def timeLines: TimeLines
 
   def timeLine(user: User): Seq[Post] = timeLines.read(user)
 
-  def parse(line: String) = Some(Lines(timeLine(User(line)).map(_.message.text)))
+  def format(post: Post): String = s"${post.message.text} (${when(post.when)})"
+
+  def when(time: DateTime): String = EventFormatter(from = timeSource.now).format(time)
+
+  def parse(line: String) = Some(Lines(timeLine(User(line)).map(format)))
 }
