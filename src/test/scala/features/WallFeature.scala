@@ -15,7 +15,7 @@ class WallFeature extends AcceptanceSpec {
       Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 2 seconds ago")
       in(thePast(2.seconds))
       app.parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
-        be(Posted(Post(User("Charlie"), Message("I'm in New York today! Anyone want to have a coffee?"), thePast(2.seconds))))
+        be(Posted(Post(Charlie, Message("I'm in New York today! Anyone want to have a coffee?"), thePast(2.seconds))))
 
       When("Charlie's wall is shown")
       in(thePresent)
@@ -32,12 +32,12 @@ class WallFeature extends AcceptanceSpec {
       Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 2 seconds ago")
       in(thePast(2.seconds))
       app.parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
-        be(Posted(Post(User("Charlie"), Message("I'm in New York today! Anyone want to have a coffee?"), thePast(2.seconds))))
+        be(Posted(Post(Charlie, Message("I'm in New York today! Anyone want to have a coffee?"), thePast(2.seconds))))
 
       And("Alice has posted 'I love the weather today' 5 minutes ago")
       in(thePast(5.minutes))
       app.parse("Alice -> I love the weather today") should
-        be(Posted(Post(User("Alice"), Message("I love the weather today"), thePast(5.minutes))))
+        be(Posted(Post(Alice, Message("I love the weather today"), thePast(5.minutes))))
 
       And("Charlie is following Alice")
       app.parse("Charlie follows Alice")

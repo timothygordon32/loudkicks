@@ -17,7 +17,7 @@ class ReadingFeature extends AcceptanceSpec {
         Given("Alice has posted 'I love the weather today' 5 minutes ago")
         in(thePast(5.minutes))
         app.parse("Alice -> I love the weather today") should
-          be(Posted(Post(User("Alice"), Message("I love the weather today"), thePast(5.minutes))))
+          be(Posted(Post(Alice, Message("I love the weather today"), thePast(5.minutes))))
 
         When("Alice's time line is read")
         in(thePresent)
@@ -33,11 +33,11 @@ class ReadingFeature extends AcceptanceSpec {
         Given("Bob has posted 'Damn! We lost!' 2 minutes ago")
         in(thePast(2.minutes))
         app.parse("Bob -> Damn! We lost!") should
-          be(Posted(Post(User("Bob"), Message("Damn! We lost!"), thePast(2.minutes))))
+          be(Posted(Post(Bob, Message("Damn! We lost!"), thePast(2.minutes))))
         And("Bob has posted 'Good game though.' 1 minute ago")
         in(thePast(1.minute))
         app.parse("Bob -> Good game though.") should
-          be(Posted(Post(User("Bob"), Message("Good game though."), thePast(1.minutes))))
+          be(Posted(Post(Bob, Message("Good game though."), thePast(1.minutes))))
 
         When("Bob's time line is read")
         in(thePresent)

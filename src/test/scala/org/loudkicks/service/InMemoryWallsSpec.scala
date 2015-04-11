@@ -9,52 +9,52 @@ class InMemoryWallsSpec extends UnitSpec {
   "Wall" when {
     "read" should {
       "be empty for an unknown user" in new TestInMemoryWalls {
-        wall(User("Zed")) should be(empty)
+        wall(Zed) should be(empty)
       }
 
       "list the user's own posts" in new TestInMemoryWalls {
         val postedAt = new DateTime()
-        timeLines.post(User("Alice"), Message("Here I am!"))
+        timeLines.post(Alice, Message("Here I am!"))
 
-        val wallForAlice = wall(User("Alice"))
+        val wallForAlice = wall(Alice)
 
         wallForAlice should have size  1
-        wallForAlice(0) should be(Post(User("Alice"), Message("Here I am!"), postedAt))
+        wallForAlice(0) should be(Post(Alice, Message("Here I am!"), postedAt))
       }
 
       "list another user's posts" in new TestInMemoryWalls {
         val postedAt = new DateTime()
-        timeLines.post(User("Alice"), Message("Here I am!"))
-        follower(User("Bob"), following = User("Alice"))
+        timeLines.post(Alice, Message("Here I am!"))
+        follower(Bob, following = Alice)
 
-        val wallForBob = wall(User("Bob"))
+        val wallForBob = wall(Bob)
 
         wallForBob should have size  1
-        wallForBob(0) should be(Post(User("Alice"), Message("Here I am!"), postedAt))
+        wallForBob(0) should be(Post(Alice, Message("Here I am!"), postedAt))
       }
 
       "list user's and followed user's posts in reverse time order" in new TestInMemoryWalls {
         val alicePostedAt = new DateTime()
         time.now = alicePostedAt
-        timeLines.post(User("Alice"), Message("Here I am!"))
+        timeLines.post(Alice, Message("Here I am!"))
 
         val charliePostedAt = alicePostedAt + 30.seconds
         time.now = charliePostedAt
-        timeLines.post(User("Charlie"), Message("What's going on today?"))
+        timeLines.post(Charlie, Message("What's going on today?"))
 
         val bobPostedAt = alicePostedAt + 1.minute
         time.now = bobPostedAt
-        timeLines.post(User("Bob"), Message("I'm here too!"))
+        timeLines.post(Bob, Message("I'm here too!"))
 
-        follower(User("Charlie"), following = User("Alice"))
-        follower(User("Charlie"), following = User("Bob"))
+        follower(Charlie, following = Alice)
+        follower(Charlie, following = Bob)
 
-        val wallForCharlie = wall(User("Charlie"))
+        val wallForCharlie = wall(Charlie)
 
         wallForCharlie should have size 3
-        wallForCharlie(0) should be(Post(User("Bob"), Message("I'm here too!"), bobPostedAt))
-        wallForCharlie(1) should be(Post(User("Charlie"), Message("What's going on today?"), charliePostedAt))
-        wallForCharlie(2) should be(Post(User("Alice"), Message("Here I am!"), alicePostedAt))
+        wallForCharlie(0) should be(Post(Bob, Message("I'm here too!"), bobPostedAt))
+        wallForCharlie(1) should be(Post(Charlie, Message("What's going on today?"), charliePostedAt))
+        wallForCharlie(2) should be(Post(Alice, Message("Here I am!"), alicePostedAt))
       }
     }
   }

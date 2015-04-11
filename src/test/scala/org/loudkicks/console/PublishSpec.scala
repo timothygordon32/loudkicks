@@ -28,14 +28,14 @@ class PublishSpec extends UnitSpec {
 
       "return a posted response for that user name and message" in {
         publish parse "Alice -> I love the weather today" should
-          contain(Posted(Post(User("Alice"), Message("I love the weather today"), postedAt)))
+          contain(Posted(Post(Alice, Message("I love the weather today"), postedAt)))
       }
 
       "save the post" in {
 
         publish parse "Alice -> I love the weather today"
 
-        posts should contain (Post(User("Alice"), Message("I love the weather today"), postedAt))
+        posts should contain (Post(Alice, Message("I love the weather today"), postedAt))
       }
     }
 

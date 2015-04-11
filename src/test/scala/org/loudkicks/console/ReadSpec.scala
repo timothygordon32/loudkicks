@@ -17,7 +17,7 @@ class ReadSpec extends UnitSpec {
           def post(user: User, message: Message) = fail("Should not make any posts")
 
           def read(user: User) = {
-            user should be(User("Zed"))
+            user should be(Zed)
             Seq.empty
           }
         }
@@ -31,7 +31,7 @@ class ReadSpec extends UnitSpec {
     }
 
     "parsing an known user" should {
-      val bob = User("Bob")
+      val bob = Bob
       val present = new DateTime
       val firstPostAt = present - 10.minute
       val secondPostAt = present - 1.minute
