@@ -1,6 +1,6 @@
 package org.loudkicks.console
 
-import org.loudkicks.Post
+import org.loudkicks.{User, Post}
 
 sealed trait Response {
   def lines: Seq[String]
@@ -15,3 +15,5 @@ trait Empty extends Response {
 case object Empty extends Empty
 
 case class Posted(post: Post) extends Empty
+
+case class Following(following: Set[User]) extends Empty

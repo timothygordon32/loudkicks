@@ -2,7 +2,7 @@ package features
 
 import com.github.nscala_time.time.Imports._
 import org.loudkicks.console.Posted
-import org.loudkicks.{Message, User, Post}
+import org.loudkicks.{Message, Post}
 
 class WallFeature extends AcceptanceSpec {
 
@@ -47,7 +47,6 @@ class WallFeature extends AcceptanceSpec {
       val wall = app.parse("Charlie wall")
 
       Then("the wall should show two messages")
-      pending
       wall.lines should have size 2
       And("the wall shows the first message 'Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' (2 seconds ago)'")
       wall.lines(0) should be("Charlie - I'm in New York today! Anyone want to have a coffee? (2 seconds ago)")

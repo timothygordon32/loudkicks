@@ -31,6 +31,17 @@ trait Read extends Command with EventFormatting {
   def parse(line: String) = Some(Lines(timeLine(User(line)).map(format)))
 }
 
+trait Follows extends Command {
+  val valid = "^(.*)? follows (.*)$".r
+
+  def walls: Walls
+
+  def parse(line: String) = line match {
+    case valid(user, following) => Some(Following(walls.follower(User(user), following = User(following))))
+    case _ => None
+  }
+}
+
 trait Wall extends Command with EventFormatting {
   val valid = "^(.*)? wall$".r
 
