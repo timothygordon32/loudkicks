@@ -2,7 +2,7 @@ package org.loudkicks.console
 
 import org.joda.time.DateTime
 import org.loudkicks.{Post, Message, User, UnitSpec}
-import org.loudkicks.service.{TimeSource, InMemoryTimeLines, InMemoryWalls}
+import org.loudkicks.service.{TestTime, TimeSource, InMemoryTimeLines, InMemoryWalls}
 
 class WallSpec extends UnitSpec {
 
@@ -14,10 +14,8 @@ class WallSpec extends UnitSpec {
 
       "list the user's own posts" in {
         val postedAt = new DateTime()
-        val timeSource = new TimeSource {
-          val now = postedAt
-        }
-        val timeLines = InMemoryTimeLines(timeSource)
+        val time = TestTime(postedAt)
+        val timeLines = InMemoryTimeLines(time)
         val walls = InMemoryWalls(timeLines)
         timeLines.post(User("Alice"), Message("Here I am!"))
 

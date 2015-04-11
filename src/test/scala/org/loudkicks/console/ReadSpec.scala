@@ -3,7 +3,7 @@ package org.loudkicks.console
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
 import org.loudkicks._
-import org.loudkicks.service.{TimeSource, TimeLines}
+import org.loudkicks.service.{TestTime, TimeLines}
 
 class ReadSpec extends UnitSpec {
 
@@ -37,9 +37,7 @@ class ReadSpec extends UnitSpec {
       val secondPostAt = present - 1.minute
 
       val read = new Read {
-        def timeSource = new TimeSource {
-          def now = present
-        }
+        def timeSource = TestTime()
 
         val timeLines = new TimeLines {
           def post(user: User, message: Message) = fail("Should not make any posts")

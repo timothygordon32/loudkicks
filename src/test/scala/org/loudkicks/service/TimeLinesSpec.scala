@@ -20,12 +20,12 @@ class TimeLinesSpec extends UnitSpec {
       val firstPostAt = new DateTime
       val secondPostAt = firstPostAt + 1.minute
 
-      val timeSource = new TimeSource {
-        var now = firstPostAt
-      }
-      val timeLines = InMemoryTimeLines(timeSource)
+      val time = TestTime()
+      val timeLines = InMemoryTimeLines(time)
+
+      time.now = firstPostAt
       timeLines.post(User("Alice"), Message("First!"))
-      timeSource.now = secondPostAt
+      time.now = secondPostAt
       timeLines.post(User("Alice"), Message("And again!"))
 
       "not return posts for another user" in {
