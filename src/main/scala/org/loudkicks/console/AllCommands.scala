@@ -1,6 +1,6 @@
 package org.loudkicks.console
 
-import org.loudkicks.service.{TimeLines, TimeSource}
+import org.loudkicks.service.{Walls, TimeLines, TimeSource}
 
 trait AllCommands {
   self: ConsoleParser =>
@@ -9,6 +9,8 @@ trait AllCommands {
 
   def timeLines: TimeLines
 
+  def walls: Walls
+
   val commands = Seq(
     new Publish {
       val timeLines = AllCommands.this.timeLines
@@ -16,7 +18,7 @@ trait AllCommands {
     new Wall {
       def timeSource = AllCommands.this.timeSource
 
-      val timeLines = AllCommands.this.timeLines
+      val walls = AllCommands.this.walls
     },
     new Read {
       def timeSource = AllCommands.this.timeSource

@@ -4,12 +4,10 @@ import com.github.nscala_time.time.DurationBuilder
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
 import org.loudkicks.console._
-import org.loudkicks.service.{InMemoryTimeLines, TestTime}
+import org.loudkicks.service.{InMemoryWalls, InMemoryTimeLines, TestTime}
 
 trait WithApp {
   val time = TestTime()
-
-  val timeLines = InMemoryTimeLines(time)
 
   val thePresent = new DateTime
 
@@ -22,5 +20,7 @@ trait WithApp {
     lazy val timeSource = WithApp.this.time
 
     lazy val timeLines = InMemoryTimeLines(timeSource)
+
+    lazy val walls = InMemoryWalls(timeLines)
   }
 }

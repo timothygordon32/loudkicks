@@ -1,6 +1,6 @@
 package org.loudkicks.console
 
-import org.loudkicks.service.TimeLines
+import org.loudkicks.service.{Walls, TimeLines}
 import org.loudkicks.{Message, Post, User}
 
 trait Command {
@@ -34,9 +34,9 @@ trait Read extends Command with EventFormatting {
 trait Wall extends Command with EventFormatting {
   val valid = "^(.*)? wall$".r
 
-  def timeLines: TimeLines
+  def walls: Walls
 
-  def wall(user: User): Seq[Post] = timeLines.read(user)
+  def wall(user: User): Seq[Post] = walls.wall(user)
 
   def format(post: Post): String = s"${post.user.name} - ${post.message.text} (${format(post.when)})"
 
