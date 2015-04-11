@@ -43,7 +43,9 @@ class ReadingFeature extends AcceptanceSpec {
         in(thePresent)
         val timeLine = app.parse("Bob")
 
-        Then("the most recent post 'Good game though. (1 minute ago)' should be shown first")
+        Then("the time line should show two lines")
+        timeLine.lines should have size 2
+        And("the most recent post 'Good game though. (1 minute ago)' should be shown first")
         timeLine.lines(0) should be("Good game though. (1 minute ago)")
         And("the previous post 'Damn! We lost! (2 minutes ago)' should be shown next")
         timeLine.lines(1) should be("Damn! We lost! (2 minutes ago)")

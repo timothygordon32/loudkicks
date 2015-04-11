@@ -29,8 +29,6 @@ class WallFeature extends AcceptanceSpec {
 
   scenario("Following one other user will show both user's own and other user's posts on the their wall") {
     new WithApp {
-      pending
-
       Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 2 seconds ago")
       in(thePast(2.seconds))
       app.parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
@@ -48,11 +46,13 @@ class WallFeature extends AcceptanceSpec {
       in(thePresent)
       val wall = app.parse("Charlie wall")
 
-      Then("the wall shows the first message 'Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' (2 seconds ago)'")
+      Then("the wall should show two messages")
+      pending
+      wall.lines should have size 2
+      And("the wall shows the first message 'Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' (2 seconds ago)'")
       wall.lines(0) should be("Charlie - I'm in New York today! Anyone want to have a coffee? (2 seconds ago)")
       And("the wall shows the second message 'Alice - I love the weather today (5 minutes ago)'")
-      wall.lines(0) should be("Alice - I love the weather today (5 minutes ago)")
-      wall.lines should have size 2
+      wall.lines(1) should be("Alice - I love the weather today (5 minutes ago)")
     }
   }
 }

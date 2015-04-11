@@ -4,7 +4,7 @@ import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
 import org.loudkicks._
 
-class TimeLinesSpec extends UnitSpec {
+class InMemoryTimeLinesSpec extends UnitSpec {
 
   "Time lines" when {
     "empty" should {
