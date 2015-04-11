@@ -1,4 +1,6 @@
-package org.loudkicks
+package org.loudkicks.console
+
+import org.loudkicks._
 
 class ConsoleParserSpec extends UnitSpec {
 

@@ -1,6 +1,7 @@
-package org.loudkicks
+package org.loudkicks.service
 
 import org.joda.time.DateTime
+import org.loudkicks.DateTimes
 
 trait TimeSource {
   def now: DateTime

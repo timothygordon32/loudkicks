@@ -1,4 +1,6 @@
-package org.loudkicks
+package org.loudkicks.console
+
+import org.loudkicks.service.{TimeLines, TimeSource}
 
 trait AllCommands {
   self: ConsoleParser =>

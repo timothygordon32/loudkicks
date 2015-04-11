@@ -1,4 +1,6 @@
-package org.loudkicks
+package org.loudkicks.console
+
+import org.loudkicks.Post
 
 sealed trait Response {
   def lines: Seq[String]

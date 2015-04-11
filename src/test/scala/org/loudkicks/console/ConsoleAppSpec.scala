@@ -1,6 +1,8 @@
-package org.loudkicks
+package org.loudkicks.console
 
 import java.io.{ByteArrayOutputStream, PrintStream, PrintWriter}
+
+import org.loudkicks.UnitSpec
 
 class ConsoleAppSpec extends UnitSpec {
 

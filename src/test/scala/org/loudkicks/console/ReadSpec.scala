@@ -1,7 +1,9 @@
-package org.loudkicks
+package org.loudkicks.console
 
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
+import org.loudkicks._
+import org.loudkicks.service.{TimeSource, TimeLines}
 
 class ReadSpec extends UnitSpec {
 

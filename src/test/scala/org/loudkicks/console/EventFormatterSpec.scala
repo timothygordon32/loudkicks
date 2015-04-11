@@ -1,7 +1,8 @@
-package org.loudkicks
+package org.loudkicks.console
 
 import com.github.nscala_time.time.Imports._
 import org.loudkicks.DateTimes._
+import org.loudkicks.UnitSpec
 
 class EventFormatterSpec extends UnitSpec {
 

@@ -1,7 +1,8 @@
 package features
 
 import com.github.nscala_time.time.Imports._
-import org.loudkicks.{Message, User, Post, Posted}
+import org.loudkicks.console.Posted
+import org.loudkicks.{Message, User, Post}
 
 class WallFeature extends AcceptanceSpec {
 

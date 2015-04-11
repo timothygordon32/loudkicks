@@ -2,6 +2,7 @@ package features
 
 import com.github.nscala_time.time.Imports._
 import org.loudkicks._
+import org.loudkicks.console.Posted
 
 class ReadingFeature extends AcceptanceSpec {
 

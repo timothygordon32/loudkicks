@@ -1,4 +1,4 @@
-package org.loudkicks
+package org.loudkicks.console
 
 trait ConsoleParser {
   def commands: Seq[Command]

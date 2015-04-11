@@ -1,9 +1,9 @@
-package org.loudkicks
+package org.loudkicks.console
 
 import com.github.nscala_time.time.Imports._
+import org.loudkicks.DateTimes._
 import org.ocpsoft.prettytime.PrettyTime
 import org.ocpsoft.prettytime.units.JustNow
-import DateTimes._
 
 case class EventFormatter(from: DateTime) {
   private val formatter = {

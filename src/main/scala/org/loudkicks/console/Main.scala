@@ -1,6 +1,8 @@
-package org.loudkicks
+package org.loudkicks.console
 
 import java.io.PrintWriter
+
+import org.loudkicks.service.{InMemoryTimeLines, SystemTimeSource}
 
 import scala.io.Source
 

@@ -1,6 +1,8 @@
-package org.loudkicks
+package org.loudkicks.console
 
 import org.joda.time.DateTime
+import org.loudkicks._
+import org.loudkicks.service.TimeLines
 
 class PublishSpec extends UnitSpec {
 

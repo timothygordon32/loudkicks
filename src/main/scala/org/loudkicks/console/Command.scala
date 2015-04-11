@@ -1,12 +1,12 @@
-package org.loudkicks
+package org.loudkicks.console
 
 import org.joda.time.DateTime
+import org.loudkicks.{Post, Message, User}
+import org.loudkicks.service.{TimeLines, TimeSource}
 
 trait Command {
   def parse(line: String): Option[Response]
 }
-
-
 
 trait Publish extends Command {
   val valid = "^(.*) -> (.*)$".r

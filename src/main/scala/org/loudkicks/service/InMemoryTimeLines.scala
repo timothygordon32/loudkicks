@@ -1,4 +1,6 @@
-package org.loudkicks
+package org.loudkicks.service
+
+import org.loudkicks.{Message, Post, User}
 
 trait InMemoryTimeLines extends TimeLines {
   def timeSource: TimeSource
