@@ -1,7 +1,9 @@
 package org.loudkicks.console
 
 import com.github.nscala_time.time.Imports._
+import org.joda.time.DateTime
 import org.loudkicks.DateTimes._
+import org.loudkicks.service.TimeSource
 import org.ocpsoft.prettytime.PrettyTime
 import org.ocpsoft.prettytime.units.JustNow
 
@@ -13,4 +15,10 @@ case class EventFormatter(from: DateTime) {
   }
 
   def format(when: DateTime): String = formatter.format(when)
+}
+
+trait EventFormatting {
+  def timeSource: TimeSource
+
+  def format(time: DateTime): String = EventFormatter(from = timeSource.now).format(time)
 }

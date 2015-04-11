@@ -13,6 +13,11 @@ trait AllCommands {
     new Publish {
       val timeLines = AllCommands.this.timeLines
     },
+    new Wall {
+      def timeSource = AllCommands.this.timeSource
+
+      val timeLines = AllCommands.this.timeLines
+    },
     new Read {
       def timeSource = AllCommands.this.timeSource
 

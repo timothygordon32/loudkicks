@@ -17,7 +17,7 @@ trait InMemoryTimeLines extends TimeLines {
 }
 
 object InMemoryTimeLines {
-  def apply(ts: TimeSource = SystemTimeSource): InMemoryTimeLines = new InMemoryTimeLines {
+  def apply(ts: TimeSource = SystemTimeSource) = new InMemoryTimeLines {
     def timeSource = ts
   }
 }

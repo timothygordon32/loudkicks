@@ -1,9 +1,9 @@
 package features
 
-import com.github.nscala_time.time.Imports._
 import com.github.nscala_time.time.DurationBuilder
+import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
-import org.loudkicks.console.{AllCommands, ConsoleParser}
+import org.loudkicks.console._
 import org.loudkicks.service.{InMemoryTimeLines, TimeSource}
 
 trait WithApp {
@@ -11,11 +11,13 @@ trait WithApp {
     var now = new DateTime
   }
 
+  val timeLines = InMemoryTimeLines(timeSource)
+
   val thePresent = new DateTime
 
-  def timeIs(when: DateTime) { timeSource.now = when }
+  def in(when: DateTime) { timeSource.now = when }
 
-  def inThePast(elapsed: DurationBuilder): DateTime = thePresent - elapsed
+  def thePast(elapsed: DurationBuilder): DateTime = thePresent - elapsed
 
   val app = new ConsoleParser with AllCommands {
 
