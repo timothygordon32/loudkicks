@@ -1,12 +1,9 @@
 package features
 
-import com.github.nscala_time.time.DurationBuilder
 import com.github.nscala_time.time.Imports._
-import org.joda.time.DateTime
 import org.loudkicks._
-import org.scalatest.{FeatureSpec, GivenWhenThen, Matchers}
 
-class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
+class ReadingFeature extends AcceptanceSpec {
 
   info("As a social networking user")
   info("I want to read each user's time line")
@@ -50,25 +47,6 @@ class ReadingFeature extends FeatureSpec with GivenWhenThen with Matchers {
         And("the previous post 'Damn! We lost! (2 minutes ago)' should be shown next")
         timeLine.lines(1) should be("Damn! We lost! (2 minutes ago)")
       }
-    }
-  }
-
-  trait WithApp {
-    val timeSource = new TimeSource {
-      var now = new DateTime
-    }
-
-    val thePresent = new DateTime
-
-    def timeIs(when: DateTime) { timeSource.now = when }
-
-    def inThePast(elapsed: DurationBuilder): DateTime = thePresent - elapsed
-
-    val app = new ConsoleParser with AllCommands {
-
-      lazy val timeSource = WithApp.this.timeSource
-
-      lazy val timeLines = InMemoryTimeLines(timeSource)
     }
   }
 }
