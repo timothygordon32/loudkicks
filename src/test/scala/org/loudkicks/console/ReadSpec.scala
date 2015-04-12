@@ -8,6 +8,18 @@ import org.loudkicks.service.{TestTime, TimeLines}
 class ReadSpec extends UnitSpec {
 
   "Read" when {
+    "parsing a invalid command line" should {
+      "ignore it" in {
+        val read = new Read {
+          def timeSource = fail("Time should not be accessed")
+
+          def timeLines = fail("Time lines should not be accessed")
+        }
+
+        read parse "Alice unrecognised command" should be(empty)
+      }
+    }
+
     "parsing an unknown user" should {
 
       val read = new Read {

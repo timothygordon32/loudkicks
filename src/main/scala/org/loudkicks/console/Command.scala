@@ -22,17 +22,22 @@ trait Publish extends Command {
 }
 
 trait Read extends Command with EventFormatting {
+  val valid = "^([^ ]*)$".r
+
   def timeLines: TimeLines
 
   def timeLine(user: User): Seq[Post] = timeLines.read(user)
 
   def format(post: Post): String = s"${post.message.text} (${format(post.when)})"
 
-  def parse(line: String) = Some(Lines(timeLine(User(line)).map(format)))
+  def parse(line: String) = line match {
+    case valid(user) => Some(Lines(timeLine(User(line)).map(format)))
+    case _ => None
+  }
 }
 
 trait Follows extends Command {
-  val valid = "^(.*)? follows (.*)$".r
+  val valid = "^(.*)? follows ([^ ]*)$".r
 
   def walls: Walls
 
