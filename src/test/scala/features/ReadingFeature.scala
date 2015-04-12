@@ -15,33 +15,29 @@ class ReadingFeature extends AcceptanceSpec {
     scenario("Alice reads her own single posted message from 5 minutes ago") {
       new WithApp {
         Given("Alice has posted 'I love the weather today' 5 minutes ago")
-        in(thePast(5.minutes))
-        app.parse("Alice -> I love the weather today") should
+        in(thePast(5.minutes)).parse("Alice -> I love the weather today") should
           be(Posted(Post(Alice, Message("I love the weather today"), thePast(5.minutes))))
 
         When("Alice's time line is read")
-        in(thePresent)
-        val timeLine = app.parse("Alice")
+        val timeLine = in(thePresent).parse("Alice")
 
         Then("the post 'I love the weather today (5 minutes ago)' should be listed")
-        timeLine.lines should contain ("I love the weather today (5 minutes ago)")
+        timeLine.lines should contain("I love the weather today (5 minutes ago)")
       }
     }
 
     scenario("Bob reads his own two messages posted 2 minutes and 1 minute ago") {
       new WithApp {
         Given("Bob has posted 'Damn! We lost!' 2 minutes ago")
-        in(thePast(2.minutes))
-        app.parse("Bob -> Damn! We lost!") should
+        in(thePast(2.minutes)).parse("Bob -> Damn! We lost!") should
           be(Posted(Post(Bob, Message("Damn! We lost!"), thePast(2.minutes))))
+
         And("Bob has posted 'Good game though.' 1 minute ago")
-        in(thePast(1.minute))
-        app.parse("Bob -> Good game though.") should
+        in(thePast(1.minute)).parse("Bob -> Good game though.") should
           be(Posted(Post(Bob, Message("Good game though."), thePast(1.minutes))))
 
         When("Bob's time line is read")
-        in(thePresent)
-        val timeLine = app.parse("Bob")
+        val timeLine = in(thePresent).parse("Bob")
 
         Then("the time line should show two lines")
         timeLine.lines should have size 2

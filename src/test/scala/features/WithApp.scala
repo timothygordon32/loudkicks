@@ -11,11 +11,14 @@ trait WithApp {
 
   val thePresent = new DateTime
 
-  def in(when: DateTime) { time.now = when }
+  def in(when: DateTime) = {
+    time.now = when
+    this
+  }
 
   def thePast(elapsed: DurationBuilder): DateTime = thePresent - elapsed
 
-  val app = new ConsoleParser with AllCommands {
+  private val app = new ConsoleParser with AllCommands {
 
     lazy val timeSource = WithApp.this.time
 
@@ -23,4 +26,6 @@ trait WithApp {
 
     lazy val walls = InMemoryWalls(timeLines)
   }
+
+  val parse = app.parse _
 }
