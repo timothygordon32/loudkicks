@@ -2,7 +2,7 @@ package org.loudkicks.service
 
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
-import org.loudkicks.{Message, Post, UnitSpec, User}
+import org.loudkicks.{Message, Post, UnitSpec}
 
 class InMemoryWallsSpec extends UnitSpec {
 

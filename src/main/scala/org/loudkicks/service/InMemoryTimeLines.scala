@@ -1,19 +1,21 @@
 package org.loudkicks.service
 
-import org.loudkicks.{Message, Post, User}
+import org.loudkicks.{TimeLine, Message, Post, User}
+
+
 
 trait InMemoryTimeLines extends TimeLines {
   def timeSource: TimeSource
 
-  private var forUser: Map[User, List[Post]] = Map.empty.withDefaultValue(List.empty)
+  private var timeLines: Map[User, TimeLine] = Map.empty.withDefaultValue(TimeLine(List.empty))
 
   def post(user: User, message: Message): Post = {
-    val postsForUser = Post(user, message, timeSource.now) :: read(user)
-    forUser = forUser + (user -> postsForUser)
+    val postsForUser = read(user).add(Post(user, message, timeSource.now))
+    timeLines = timeLines + (user -> postsForUser)
     read(user).head
   }
 
-  def read(user: User) = forUser(user)
+  def read(user: User) = timeLines(user)
 }
 
 object InMemoryTimeLines {

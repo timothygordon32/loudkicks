@@ -1,7 +1,7 @@
 package org.loudkicks.console
 
 import org.loudkicks.service.{Walls, TimeLines}
-import org.loudkicks.{Message, Post, User}
+import org.loudkicks.{TimeLine, Message, Post, User}
 
 trait Command {
   def parse(line: String): Option[Response]
@@ -26,12 +26,12 @@ trait Read extends Command with EventFormatting {
 
   def timeLines: TimeLines
 
-  def timeLine(user: User): Seq[Post] = timeLines.read(user)
+  def timeLine(user: User): TimeLine = timeLines.read(user)
 
   def format(post: Post): String = s"${post.message.text} (${format(post.when)})"
 
   def parse(line: String) = line match {
-    case valid(user) => Some(Lines(timeLine(User(line)).map(format)))
+    case valid(user) => Some(Lines(timeLine(User(line)).posts.map(format)))
     case _ => None
   }
 }

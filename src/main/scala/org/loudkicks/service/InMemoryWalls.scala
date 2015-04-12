@@ -8,7 +8,7 @@ trait InMemoryWalls extends Walls {
 
   def timeLines: TimeLines
 
-  def wall(user: User) = (timeLines.read(user) ++ following(user).map(timeLines.read).flatten).sortWith((a, b) => a.when > b.when)
+  def wall(user: User) = (timeLines.read(user).posts ++ following(user).map(timeLines.read(_).posts).flatten).sortWith(_.when > _.when)
 
   def follower(user: User, following: User): Set[User] = {
     val updatedFollowing = this.following(user) + following

@@ -30,7 +30,7 @@ class ReadSpec extends UnitSpec {
 
           def read(user: User) = {
             user should be(Zed)
-            Seq.empty
+            TimeLine(List.empty)
           }
         }
       }
@@ -56,10 +56,10 @@ class ReadSpec extends UnitSpec {
 
           def read(user: User) = {
             user should be(bob)
-            Seq(
+            TimeLine(List(
               Post(bob, Message("Good game, though."), secondPostAt),
               Post(bob, Message("Damn! We lost!"), firstPostAt)
-            )
+            ))
           }
         }
       }

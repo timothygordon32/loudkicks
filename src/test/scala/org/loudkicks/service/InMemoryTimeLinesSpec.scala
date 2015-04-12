@@ -11,7 +11,7 @@ class InMemoryTimeLinesSpec extends UnitSpec {
       "report no posts for a user" in {
         val timeLines = InMemoryTimeLines()
 
-        timeLines.read(Alice) should be(empty)
+        timeLines.read(Alice).posts should be(empty)
       }
     }
 
@@ -31,15 +31,15 @@ class InMemoryTimeLinesSpec extends UnitSpec {
       "not return posts for another user" in {
         val timeLine = timeLines.read(Bob)
 
-        timeLine should be(empty)
+        timeLine.posts should be(empty)
       }
 
       "return the posts for that user in reverse order" in {
         val timeLine = timeLines.read(Alice)
 
-        timeLine should have size 2
-        timeLine(0) should be(Post(Alice, Message("And again!"), secondPostAt))
-        timeLine(1) should be(Post(Alice, Message("First!"), firstPostAt))
+        timeLine.posts should have size 2
+        timeLine.posts(0) should be(Post(Alice, Message("And again!"), secondPostAt))
+        timeLine.posts(1) should be(Post(Alice, Message("First!"), firstPostAt))
       }
     }
   }
