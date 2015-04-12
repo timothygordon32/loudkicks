@@ -10,85 +10,82 @@ class WallFeature extends AcceptanceSpec {
   info("I want to see a wall of all my posts and of all the users I follow")
   info("So that I can see what me and my friends have been up to all in one place")
 
-  scenario("User's own posts appear on their wall") {
-    new WithApp {
-      Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 2 seconds ago")
-      in(thePast(2.seconds)).parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
-        be(Posted(Post(Charlie, Message("I'm in New York today! Anyone want to have a coffee?"), thePast(2.seconds))))
+  scenario("User's own posts appear on their wall")(new WithApp {
 
-      When("Charlie's wall is shown")
-      val wall = in(thePresent).parse("Charlie wall")
+    Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 2 seconds ago")
+    in(thePast(2.seconds)).parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
+      be(Posted(Post(Charlie, Message("I'm in New York today! Anyone want to have a coffee?"), thePast(2.seconds))))
 
-      Then("the wall shows the message 'Charlie - I'm in New York today! Anyone want to have a coffee? (2 seconds ago)'")
-      wall.lines should have size 1
-      wall.lines should contain ("Charlie - I'm in New York today! Anyone want to have a coffee? (2 seconds ago)")
-    }
-  }
+    When("Charlie's wall is shown")
+    val wall = in(thePresent).parse("Charlie wall")
 
-  scenario("Following one other user will show both user's own and other user's posts on the their wall") {
-    new WithApp {
-      Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 2 seconds ago")
-      in(thePast(2.seconds)).parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
-        be(Posted(Post(Charlie, Message("I'm in New York today! Anyone want to have a coffee?"), thePast(2.seconds))))
+    Then("the wall shows the message 'Charlie - I'm in New York today! Anyone want to have a coffee? (2 seconds ago)'")
+    wall.lines should have size 1
+    wall.lines should contain("Charlie - I'm in New York today! Anyone want to have a coffee? (2 seconds ago)")
+  })
 
-      And("Alice has posted 'I love the weather today' 5 minutes ago")
-      in(thePast(5.minutes)).parse("Alice -> I love the weather today") should
-        be(Posted(Post(Alice, Message("I love the weather today"), thePast(5.minutes))))
+  scenario("Following one other user will show both user's own and other user's posts on the their wall")(new WithApp {
 
-      And("Charlie is following Alice")
-      parse("Charlie follows Alice") should
-        be(Following(Charlie, following = Set(Alice)))
+    Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 2 seconds ago")
+    in(thePast(2.seconds)).parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
+      be(Posted(Post(Charlie, Message("I'm in New York today! Anyone want to have a coffee?"), thePast(2.seconds))))
 
-      When("Charlie's wall is shown")
-      val wall = in(thePresent).parse("Charlie wall")
+    And("Alice has posted 'I love the weather today' 5 minutes ago")
+    in(thePast(5.minutes)).parse("Alice -> I love the weather today") should
+      be(Posted(Post(Alice, Message("I love the weather today"), thePast(5.minutes))))
 
-      Then("the wall should show two messages")
-      wall.lines should have size 2
+    And("Charlie is following Alice")
+    parse("Charlie follows Alice") should
+      be(Following(Charlie, following = Set(Alice)))
 
-      And("the wall shows the first message 'Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' (2 seconds ago)'")
-      wall.lines(0) should be("Charlie - I'm in New York today! Anyone want to have a coffee? (2 seconds ago)")
+    When("Charlie's wall is shown")
+    val wall = in(thePresent).parse("Charlie wall")
 
-      And("the wall shows the second message 'Alice - I love the weather today (5 minutes ago)'")
-      wall.lines(1) should be("Alice - I love the weather today (5 minutes ago)")
-    }
-  }
+    Then("the wall should show two messages")
+    wall.lines should have size 2
 
-  scenario("Following two other users will show both user's own and other user's posts on the their wall") {
-    new WithApp {
-      Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 15 seconds ago")
-      in(thePast(15.seconds)).parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
-        be(Posted(Post(Charlie, Message("I'm in New York today! Anyone want to have a coffee?"), thePast(15.seconds))))
+    And("the wall shows the first message 'Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' (2 seconds ago)'")
+    wall.lines(0) should be("Charlie - I'm in New York today! Anyone want to have a coffee? (2 seconds ago)")
 
-      And("Alice has posted 'I love the weather today' 5 minutes ago")
-      in(thePast(5.minutes)).parse("Alice -> I love the weather today") should
-        be(Posted(Post(Alice, Message("I love the weather today"), thePast(5.minutes))))
+    And("the wall shows the second message 'Alice - I love the weather today (5 minutes ago)'")
+    wall.lines(1) should be("Alice - I love the weather today (5 minutes ago)")
+  })
 
-      And("Bob has posted 'Damn! We lost!' 2 minutes ago")
-      in(thePast(2.minutes)).parse("Bob -> Damn! We lost!") should
-        be(Posted(Post(Bob, Message("Damn! We lost!"), thePast(2.minutes))))
+  scenario("Following two other users will show both user's own and other user's posts on the their wall")(new WithApp {
 
-      And("Bob has posted 'Good game though.' 1 minute ago")
-      in(thePast(1.minute)).parse("Bob -> Good game though.") should
-        be(Posted(Post(Bob, Message("Good game though."), thePast(1.minute))))
+    Given("Charlie has posted 'I'm in New York today! Anyone want to have a coffee?' 15 seconds ago")
+    in(thePast(15.seconds)).parse("Charlie -> I'm in New York today! Anyone want to have a coffee?") should
+      be(Posted(Post(Charlie, Message("I'm in New York today! Anyone want to have a coffee?"), thePast(15.seconds))))
 
-      And("Charlie follows both Alice and Bob")
-      parse("Charlie follows Alice")
-      parse("Charlie follows Bob") should
-        be(Following(Charlie, following = Set(Alice, Bob)))
+    And("Alice has posted 'I love the weather today' 5 minutes ago")
+    in(thePast(5.minutes)).parse("Alice -> I love the weather today") should
+      be(Posted(Post(Alice, Message("I love the weather today"), thePast(5.minutes))))
 
-      When("Charlie's wall is displayed")
-      val wall = in(thePresent).parse("Charlie wall")
+    And("Bob has posted 'Damn! We lost!' 2 minutes ago")
+    in(thePast(2.minutes)).parse("Bob -> Damn! We lost!") should
+      be(Posted(Post(Bob, Message("Damn! We lost!"), thePast(2.minutes))))
 
-      Then("Charlie's wall should show 4 messages")
-      wall.lines should have size 4
-      And("the wall shows the first message 'Charlie - I'm in New York today! Anyone want to have a coffee?' (15 seconds ago)'")
-      wall.lines(0) should be("Charlie - I'm in New York today! Anyone want to have a coffee? (15 seconds ago)")
-      And("the wall shows the second message 'Bob - Good game though. (1 minute ago)'")
-      wall.lines(1) should be("Bob - Good game though. (1 minute ago)")
-      And("the wall shows the third message 'Bob - Damn! We lost! (2 minutes ago)")
-      wall.lines(2) should be("Bob - Damn! We lost! (2 minutes ago)")
-      And("the wall shows the fourth message 'Alice - I love the weather today (5 minutes ago)'")
-      wall.lines(3) should be("Alice - I love the weather today (5 minutes ago)")
-    }
-  }
+    And("Bob has posted 'Good game though.' 1 minute ago")
+    in(thePast(1.minute)).parse("Bob -> Good game though.") should
+      be(Posted(Post(Bob, Message("Good game though."), thePast(1.minute))))
+
+    And("Charlie follows both Alice and Bob")
+    parse("Charlie follows Alice")
+    parse("Charlie follows Bob") should
+      be(Following(Charlie, following = Set(Alice, Bob)))
+
+    When("Charlie's wall is displayed")
+    val wall = in(thePresent).parse("Charlie wall")
+
+    Then("Charlie's wall should show 4 messages")
+    wall.lines should have size 4
+    And("the wall shows the first message 'Charlie - I'm in New York today! Anyone want to have a coffee?' (15 seconds ago)'")
+    wall.lines(0) should be("Charlie - I'm in New York today! Anyone want to have a coffee? (15 seconds ago)")
+    And("the wall shows the second message 'Bob - Good game though. (1 minute ago)'")
+    wall.lines(1) should be("Bob - Good game though. (1 minute ago)")
+    And("the wall shows the third message 'Bob - Damn! We lost! (2 minutes ago)")
+    wall.lines(2) should be("Bob - Damn! We lost! (2 minutes ago)")
+    And("the wall shows the fourth message 'Alice - I love the weather today (5 minutes ago)'")
+    wall.lines(3) should be("Alice - I love the weather today (5 minutes ago)")
+  })
 }
