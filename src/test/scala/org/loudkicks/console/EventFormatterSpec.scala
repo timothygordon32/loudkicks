@@ -3,27 +3,28 @@ package org.loudkicks.console
 import com.github.nscala_time.time.Imports._
 import org.loudkicks.DateTimes._
 import org.loudkicks.UnitSpec
+import org.loudkicks.service.TestTime
 
 class EventFormatterSpec extends UnitSpec {
 
   "Event" when {
     "1 second ago" should {
-      "format to '1 second ago'" in {
+      "format to '1 second ago'" in new EventFormatting {
+        val timeSource = TestTime()
 
-        val reference = now
-        val oneSecondAgo = reference - 1.second
+        val oneSecondAgo = timeSource.now - 1.second
 
-        EventFormatter(from = reference) format oneSecondAgo should be("1 second ago")
+        format(oneSecondAgo) should be("1 second ago")
       }
     }
 
     "10 seconds ago" should {
-      "format to '10 seconds ago'" in {
+      "format to '10 seconds ago'" in new EventFormatting {
+        val timeSource = TestTime()
 
-        val reference = now
-        val tenSecondsAgo = reference - 10.seconds
+        val tenSecondsAgo = timeSource.now - 10.seconds
 
-        EventFormatter(from = reference) format tenSecondsAgo should be("10 seconds ago")
+        format(tenSecondsAgo) should be("10 seconds ago")
       }
     }
   }

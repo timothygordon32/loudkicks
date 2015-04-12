@@ -6,18 +6,20 @@ import org.loudkicks.service.TimeSource
 import org.ocpsoft.prettytime.PrettyTime
 import org.ocpsoft.prettytime.units.JustNow
 
-case class EventFormatter(from: DateTime) {
-  private val formatter = {
-    val pt = new PrettyTime(from)
-    pt.getUnit(classOf[JustNow]).setMaxQuantity(999)
-    pt
-  }
-
-  def format(when: DateTime): String = formatter.format(when)
-}
-
 trait EventFormatting {
   def timeSource: TimeSource
+
+  case class EventFormatter(from: DateTime) {
+    val ResolutionAtSeconds = 999
+
+    private val formatter = {
+      val pt = new PrettyTime(from)
+      pt.getUnit(classOf[JustNow]).setMaxQuantity(ResolutionAtSeconds)
+      pt
+    }
+
+    def format(when: DateTime): String = formatter.format(when)
+  }
 
   def format(time: DateTime): String = EventFormatter(from = timeSource.now).format(time)
 }
