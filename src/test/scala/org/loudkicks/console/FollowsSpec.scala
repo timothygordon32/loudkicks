@@ -24,8 +24,8 @@ class FollowsSpec extends UnitSpec {
       }
 
       "have one user follow another" in {
-        follows parse "Bob follows Alice" should contain (Following(Bob, following = Set(Alice)))
-        follows parse "Bob follows Charlie" should contain (Following(Bob, following = Set(Alice, Charlie)))
+        follows parse "Bob follows Alice" should contain (Subscriber(Bob, following = Set(Alice)))
+        follows parse "Bob follows Charlie" should contain (Subscriber(Bob, following = Set(Alice, Charlie)))
       }
     }
 

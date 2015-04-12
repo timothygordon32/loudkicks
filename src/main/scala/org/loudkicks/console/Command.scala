@@ -43,7 +43,7 @@ trait Follows extends Command {
 
   def parse(line: String) = line match {
     case valid(user, following) => val follower = User(user)
-      Some(Following(follower, walls.follower(follower, following = User(following))))
+      Some(Subscriber(follower, walls.follower(follower, following = User(following))))
     case _ => None
   }
 }

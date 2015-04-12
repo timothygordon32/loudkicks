@@ -1,7 +1,7 @@
 package features
 
 import com.github.nscala_time.time.Imports._
-import org.loudkicks.console.{Following, Posted}
+import org.loudkicks.console.{Subscriber, Posted}
 import org.loudkicks.{Message, Post}
 
 class WallFeature extends AcceptanceSpec {
@@ -36,7 +36,7 @@ class WallFeature extends AcceptanceSpec {
 
     And("Charlie is following Alice")
     parse("Charlie follows Alice") should
-      be(Following(Charlie, following = Set(Alice)))
+      be(Subscriber(Charlie, following = Set(Alice)))
 
     When("Charlie's wall is shown")
     val wall = in(thePresent).parse("Charlie wall")
@@ -72,7 +72,7 @@ class WallFeature extends AcceptanceSpec {
     And("Charlie follows both Alice and Bob")
     parse("Charlie follows Alice")
     parse("Charlie follows Bob") should
-      be(Following(Charlie, following = Set(Alice, Bob)))
+      be(Subscriber(Charlie, following = Set(Alice, Bob)))
 
     When("Charlie's wall is displayed")
     val wall = in(thePresent).parse("Charlie wall")
