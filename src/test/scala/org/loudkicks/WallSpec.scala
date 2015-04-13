@@ -50,21 +50,25 @@ class WallSpec extends UnitSpec {
     }
 
     "combining" should {
-      "drop an empty wall" in {
+      "commute for one empty operand" in {
         val now = new DateTime
         val postedNow = Post(Alice, Message("now"), now)
 
-        Wall(Seq.empty).addRecent(postedNow) should
+        Wall(Seq.empty) + Wall(Seq(postedNow)) should
+          be (Wall(Seq(postedNow)))
+        Wall(Seq(postedNow)) + Wall(Seq.empty) should
           be (Wall(Seq(postedNow)))
       }
 
-      "combine walls in either order" in {
+      "commute for non-empty operands" in {
         val now = new DateTime
         val earlier = now - 1.second
         val postedNow = Post(Alice, Message("now"), now)
         val postedEarlier = Post(Bob, Message("earlier"), earlier)
 
-        Wall(Seq(postedNow)).addRecent(postedEarlier) should
+        Wall(Seq(postedNow)) + Wall(Seq(postedEarlier)) should
+          be (Wall(Seq(postedNow, postedEarlier)))
+        Wall(Seq(postedEarlier)) + Wall(Seq(postedNow)) should
           be (Wall(Seq(postedNow, postedEarlier)))
       }
     }
