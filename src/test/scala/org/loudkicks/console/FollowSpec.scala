@@ -1,7 +1,7 @@
 package org.loudkicks.console
 
 import org.loudkicks._
-import org.loudkicks.service.Walls
+import org.loudkicks.service.{PostSubscriber, Walls}
 
 class FollowSpec extends UnitSpec {
 
@@ -11,7 +11,7 @@ class FollowSpec extends UnitSpec {
 
       var bobFollowing: Set[User] = Set.empty
 
-      val walls = new Walls {
+      val walls = new Walls with NoPostsShouldBeReceived {
         def wall(user: User) = fail("No wall should be accessed")
 
         def follower(user: User, following: User) = {
@@ -30,7 +30,7 @@ class FollowSpec extends UnitSpec {
 
     "parsing a invalid command line" should {
       "ignore it" in {
-        val walls = new Walls {
+        val walls = new Walls with NoPostsShouldBeReceived  {
           def wall(user: User) = fail("No wall should be accessed")
 
           def follower(user: User, following: User) = fail("No following should occur")
@@ -39,5 +39,9 @@ class FollowSpec extends UnitSpec {
         Follow(walls) parse "Alice" should be(empty)
       }
     }
+  }
+
+  trait NoPostsShouldBeReceived extends PostSubscriber {
+    def update(post: Post) = fail("No posts should be received")
   }
 }

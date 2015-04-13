@@ -2,7 +2,7 @@ package org.loudkicks.service
 
 import org.loudkicks.{Post, User, Wall}
 
-trait InMemoryWalls extends Walls with PostSubscriber {
+trait InMemoryWalls extends Walls {
   var following: Map[User, Set[User]] = Map.empty.withDefaultValue(Set.empty)
   var walls: Map[User, Wall] = Map.empty.withDefaultValue(Wall(Seq.empty))
 
