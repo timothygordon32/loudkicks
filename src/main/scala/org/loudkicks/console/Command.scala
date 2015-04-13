@@ -1,13 +1,13 @@
 package org.loudkicks.console
 
-import org.loudkicks.service.{Walls, TimeLines}
-import org.loudkicks.{TimeLine, Message, Post, User}
+import org.loudkicks.service.{TimeLines, TimeSource, Walls}
+import org.loudkicks.{Message, Post, User}
 
 trait Command {
   def parse(line: String): Option[Response]
 }
 
-trait Publish extends Command {
+case class Publish(timeLines: TimeLines) extends Command {
   val valid = "^(.*) -> (.*)$".r
 
   def parse(line: String) = line match {
@@ -16,30 +16,22 @@ trait Publish extends Command {
     case _ => None
   }
 
-  def timeLines: TimeLines
-
   def post(user: User, message: Message) = timeLines.post(user, message)
 }
 
-trait ReadTimeLine extends Command with EventFormatting {
+case class ReadTimeLine(timeLines: TimeLines, timeSource: TimeSource) extends Command with EventFormatting {
   val valid = "^([^ ]*)$".r
-
-  def timeLines: TimeLines
-
-  def timeLine(user: User): TimeLine = timeLines.read(user)
 
   def format(post: Post): String = s"${post.message.text} (${format(post.when)})"
 
   def parse(line: String) = line match {
-    case valid(user) => Some(Lines(timeLine(User(line)).posts.map(format)))
+    case valid(user) => Some(Lines(timeLines.read(User(user)).posts.map(format)))
     case _ => None
   }
 }
 
-trait Follow extends Command {
+case class Follow(walls: Walls) extends Command {
   val valid = "^(.*)? follows ([^ ]*)$".r
-
-  def walls: Walls
 
   def parse(line: String) = line match {
     case valid(user, following) => val follower = User(user)
@@ -48,10 +40,8 @@ trait Follow extends Command {
   }
 }
 
-trait ReadWall extends Command with EventFormatting {
+case class ReadWall(walls: Walls, timeSource: TimeSource) extends Command with EventFormatting {
   val valid = "^(.*)? wall$".r
-
-  def walls: Walls
 
   def wall(user: User): Seq[Post] = walls.wall(user).posts
 
