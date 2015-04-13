@@ -3,7 +3,7 @@ package org.loudkicks.service
 import org.loudkicks.{Post, User, Wall}
 
 class InMemoryWalls extends Walls {
-  private var walls: Map[User, Wall] = Map.empty.withDefaultValue(Wall(Seq.empty))
+  private var walls: Map[User, Wall] = Map.empty.withDefaultValue(Wall(List.empty))
   private var following: Map[User, Set[User]] = Map.empty.withDefaultValue(Set.empty)
 
   def update(post: Post) = {

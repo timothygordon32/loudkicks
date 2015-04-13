@@ -26,7 +26,7 @@ class ReadWallSpec extends UnitSpec {
         val walls = new Walls {
           def wall(user: User) = {
             user should be(Bob)
-            Wall(Seq(
+            Wall(List(
               Post(Bob, Message("Too cold for me."), bobPostedAt),
               Post(Alice, Message("I really like the weather today!"), alicePostedAt)
             ))

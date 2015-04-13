@@ -59,7 +59,7 @@ class InMemoryWallsSpec extends UnitSpec {
       "add the updated to the users's wall when they are following now-one" in new InMemoryWalls {
         val updateAt = new DateTime
         val postForAlice = Post(Alice, Message("Hi there"), updateAt)
-        update(postForAlice) should be(Set(Wall(Seq(postForAlice))))
+        update(postForAlice) should be(Set(Wall(List(postForAlice))))
       }
     }
   }

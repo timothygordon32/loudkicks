@@ -2,7 +2,7 @@ package org.loudkicks
 
 import com.github.nscala_time.time.Imports._
 
-case class Wall(posts: Seq[Post]) {
+case class Wall(posts: List[Post]) {
   def addRecent(post: Post): Wall = {
     val i = posts.indexWhere(_.when > post.when)
     val (before, after) = posts.splitAt(i + 1)

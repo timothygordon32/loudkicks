@@ -10,8 +10,8 @@ class WallSpec extends UnitSpec {
         val now = new DateTime
         val postedNow = Post(Alice, Message("now"), now)
 
-        Wall(Seq.empty).addRecent(postedNow) should
-          be (Wall(Seq(postedNow)))
+        Wall(List.empty).addRecent(postedNow) should
+          be (Wall(List(postedNow)))
       }
     }
 
@@ -22,8 +22,8 @@ class WallSpec extends UnitSpec {
         val postedNow = Post(Alice, Message("now"), now)
         val postedEarlier = Post(Bob, Message("earlier"), earlier)
 
-        Wall(Seq(postedNow)).addRecent(postedEarlier) should
-          be (Wall(Seq(postedNow, postedEarlier)))
+        Wall(List(postedNow)).addRecent(postedEarlier) should
+          be (Wall(List(postedNow, postedEarlier)))
       }
 
       "place the new later event before the earlier existing event" in {
@@ -32,8 +32,8 @@ class WallSpec extends UnitSpec {
         val postedNow = Post(Alice, Message("now"), now)
         val postedLater = Post(Charlie, Message("later"), later)
 
-        Wall(Seq(postedNow)).addRecent(postedLater) should
-          be (Wall(Seq(postedLater, postedNow)))
+        Wall(List(postedNow)).addRecent(postedLater) should
+          be (Wall(List(postedLater, postedNow)))
       }
 
       "place the new event after the existing later event and before the earlier existing event" in {
@@ -44,8 +44,8 @@ class WallSpec extends UnitSpec {
         val postedLater = Post(Charlie, Message("later"), later)
         val postedEarlier = Post(Bob, Message("earlier"), earlier)
 
-        Wall(Seq(postedLater, postedEarlier)).addRecent(postedNow) should
-          be (Wall(Seq(postedLater, postedNow, postedEarlier)))
+        Wall(List(postedLater, postedEarlier)).addRecent(postedNow) should
+          be (Wall(List(postedLater, postedNow, postedEarlier)))
       }
     }
 
@@ -54,10 +54,10 @@ class WallSpec extends UnitSpec {
         val now = new DateTime
         val postedNow = Post(Alice, Message("now"), now)
 
-        Wall(Seq.empty) + Wall(Seq(postedNow)) should
-          be (Wall(Seq(postedNow)))
-        Wall(Seq(postedNow)) + Wall(Seq.empty) should
-          be (Wall(Seq(postedNow)))
+        Wall(List.empty) + Wall(List(postedNow)) should
+          be (Wall(List(postedNow)))
+        Wall(List(postedNow)) + Wall(List.empty) should
+          be (Wall(List(postedNow)))
       }
 
       "commute for non-empty operands" in {
@@ -66,10 +66,10 @@ class WallSpec extends UnitSpec {
         val postedNow = Post(Alice, Message("now"), now)
         val postedEarlier = Post(Bob, Message("earlier"), earlier)
 
-        Wall(Seq(postedNow)) + Wall(Seq(postedEarlier)) should
-          be (Wall(Seq(postedNow, postedEarlier)))
-        Wall(Seq(postedEarlier)) + Wall(Seq(postedNow)) should
-          be (Wall(Seq(postedNow, postedEarlier)))
+        Wall(List(postedNow)) + Wall(List(postedEarlier)) should
+          be (Wall(List(postedNow, postedEarlier)))
+        Wall(List(postedEarlier)) + Wall(List(postedNow)) should
+          be (Wall(List(postedNow, postedEarlier)))
       }
     }
   }

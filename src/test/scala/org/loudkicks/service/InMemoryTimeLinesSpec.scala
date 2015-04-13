@@ -17,7 +17,7 @@ class InMemoryTimeLinesSpec extends UnitSpec {
 
     "posted to by a user" should {
 
-      var received: Seq[Post] = Seq.empty
+      var received: List[Post] = List.empty
 
       val firstPostAt = new DateTime
       val secondPostAt = firstPostAt + 1.minute
