@@ -11,8 +11,8 @@ object Main extends App with ConsoleApp with ConsoleParser with AllCommands {
   val input = Source.stdin.getLines()
   val output = new PrintWriter(System.out, true)
 
-  lazy val timeLines = InMemoryTimeLines()
-  lazy val walls = InMemoryWalls(timeLines)
+  lazy val walls = InMemoryWalls()
+  lazy val timeLines = InMemoryTimeLines(subscriber = Some(walls))
   lazy val timeSource = SystemTimeSource
 
   run()

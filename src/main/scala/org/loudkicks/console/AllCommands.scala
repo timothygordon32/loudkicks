@@ -15,15 +15,15 @@ trait AllCommands {
     new Publish {
       val timeLines = AllCommands.this.timeLines
     },
-    new Read {
+    new ReadTimeLine {
       def timeSource = AllCommands.this.timeSource
 
       val timeLines = AllCommands.this.timeLines
     },
-    new Follows {
+    new Follow {
       def walls = AllCommands.this.walls
     },
-    new Wall {
+    new ReadWall {
       def timeSource = AllCommands.this.timeSource
 
       val walls = AllCommands.this.walls

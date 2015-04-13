@@ -9,7 +9,7 @@ class InMemoryTimeLinesSpec extends UnitSpec {
   "Time lines" when {
     "empty" should {
       "report no posts for a user" in {
-        val timeLines = InMemoryTimeLines()
+        val timeLines = InMemoryTimeLines(subscriber = None)
 
         timeLines.read(Alice).posts should be(empty)
       }
@@ -21,7 +21,7 @@ class InMemoryTimeLinesSpec extends UnitSpec {
       val secondPostAt = firstPostAt + 1.minute
 
       val time = TestTime()
-      val timeLines = InMemoryTimeLines(time)
+      val timeLines = InMemoryTimeLines(subscriber = None, time)
 
       time.now = firstPostAt
       timeLines.post(Alice, Message("First!"))

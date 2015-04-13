@@ -22,9 +22,9 @@ trait WithApp {
 
     lazy val timeSource = WithApp.this.time
 
-    lazy val timeLines = InMemoryTimeLines(timeSource)
+    lazy val walls = InMemoryWalls()
 
-    lazy val walls = InMemoryWalls(timeLines)
+    lazy val timeLines = InMemoryTimeLines(subscriber = Some(walls), timeSource)
   }
 
   val parse = app.parse _

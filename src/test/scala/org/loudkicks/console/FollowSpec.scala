@@ -3,15 +3,15 @@ package org.loudkicks.console
 import org.loudkicks._
 import org.loudkicks.service.Walls
 
-class FollowsSpec extends UnitSpec {
+class FollowSpec extends UnitSpec {
 
-  "Follows" when {
+  "Follow" when {
 
     "parsing a valid command line" should {
 
       var bobFollowing: Set[User] = Set.empty
 
-      val follows = new Follows {
+      val follow = new Follow {
         val walls = new Walls {
           def wall(user: User) = fail("No wall should be accessed")
 
@@ -24,14 +24,14 @@ class FollowsSpec extends UnitSpec {
       }
 
       "have one user follow another" in {
-        follows parse "Bob follows Alice" should contain (Subscriber(Bob, following = Set(Alice)))
-        follows parse "Bob follows Charlie" should contain (Subscriber(Bob, following = Set(Alice, Charlie)))
+        follow parse "Bob follows Alice" should contain (Subscriber(Bob, following = Set(Alice)))
+        follow parse "Bob follows Charlie" should contain (Subscriber(Bob, following = Set(Alice, Charlie)))
       }
     }
 
     "parsing a invalid command line" should {
       "ignore it" in {
-        val follows = new Follows {
+        val follow = new Follow {
           val walls = new Walls {
             def wall(user: User) = fail("No wall should be accessed")
 
@@ -39,7 +39,7 @@ class FollowsSpec extends UnitSpec {
           }
         }
 
-        follows parse "Alice" should be(empty)
+        follow parse "Alice" should be(empty)
       }
     }
   }

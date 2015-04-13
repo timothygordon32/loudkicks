@@ -21,7 +21,7 @@ trait Publish extends Command {
   def post(user: User, message: Message) = timeLines.post(user, message)
 }
 
-trait Read extends Command with EventFormatting {
+trait ReadTimeLine extends Command with EventFormatting {
   val valid = "^([^ ]*)$".r
 
   def timeLines: TimeLines
@@ -36,7 +36,7 @@ trait Read extends Command with EventFormatting {
   }
 }
 
-trait Follows extends Command {
+trait Follow extends Command {
   val valid = "^(.*)? follows ([^ ]*)$".r
 
   def walls: Walls
@@ -48,12 +48,12 @@ trait Follows extends Command {
   }
 }
 
-trait Wall extends Command with EventFormatting {
+trait ReadWall extends Command with EventFormatting {
   val valid = "^(.*)? wall$".r
 
   def walls: Walls
 
-  def wall(user: User): Seq[Post] = walls.wall(user)
+  def wall(user: User): Seq[Post] = walls.wall(user).posts
 
   def format(post: Post): String = s"${post.user.name} - ${post.message.text} (${format(post.when)})"
 
