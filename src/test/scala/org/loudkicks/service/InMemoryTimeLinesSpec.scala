@@ -9,31 +9,21 @@ class InMemoryTimeLinesSpec extends UnitSpec {
   "Time lines" when {
     "empty" should {
       "report no posts for a user" in {
-        val timeLines = InMemoryTimeLines(subscriber = None)
+        val timeLines = InMemoryTimeLines()
 
         timeLines.read(Alice).posts should be(empty)
       }
     }
 
     "posted to by a user" should {
-
-      var received: List[Post] = List.empty
-
       val firstPostAt = new DateTime
       val secondPostAt = firstPostAt + 1.minute
 
       val time = TestTime()
-      val timeLines = InMemoryTimeLines(subscriber = Some(new PostSubscriber {
-        def update(post: Post) = {
-          received = received :+ post
-          Set(Wall(received))
-        }
-      }), time)
+      val timeLines = InMemoryTimeLines(time)
 
-      time.now = firstPostAt
-      timeLines.post(Alice, Message("First!"))
-      time.now = secondPostAt
-      timeLines.post(Alice, Message("And again!"))
+      timeLines.posted(Post(Alice, Message("First!"), firstPostAt))
+      timeLines.posted(Post(Alice, Message("And again!"), secondPostAt))
 
       "not return posts for another user" in {
         val timeLine = timeLines.read(Bob)
@@ -47,12 +37,6 @@ class InMemoryTimeLinesSpec extends UnitSpec {
         timeLine.posts should have size 2
         timeLine.posts(0) should be(Post(Alice, Message("And again!"), secondPostAt))
         timeLine.posts(1) should be(Post(Alice, Message("First!"), firstPostAt))
-      }
-
-      "forward posts to subscriber" in {
-        received should be(Seq(
-          Post(Alice, Message("First!"), firstPostAt),
-          Post(Alice, Message("And again!"), secondPostAt)))
       }
     }
   }

@@ -2,19 +2,19 @@ package org.loudkicks.service
 
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
-import org.loudkicks.{Wall, Message, Post, UnitSpec}
+import org.loudkicks.{Message, Post, UnitSpec}
 
 class InMemoryWallsSpec extends UnitSpec {
 
   "InMemoryWalls" when {
     "read" should {
-      "be empty for an unknown user" in new InMemoryWalls {
+      "be empty for an unknown user" in new TestInMemoryWalls {
         wall(Zed).posts should be(empty)
       }
 
-      "list the user's own posts" in new InMemoryWalls {
+      "list the user's own posts" in new TestInMemoryWalls {
         val postedAt = new DateTime()
-        update(Post(Alice, Message("Here I am!"), postedAt))
+        posted(Post(Alice, Message("Here I am!"), postedAt))
 
         val wallForAlice = wall(Alice)
 
@@ -22,9 +22,9 @@ class InMemoryWallsSpec extends UnitSpec {
         wallForAlice.posts(0) should be(Post(Alice, Message("Here I am!"), postedAt))
       }
 
-      "list another user's posts" in new InMemoryWalls {
+      "list another user's posts" in new TestInMemoryWalls {
         val postedAt = new DateTime()
-        update(Post(Alice, Message("Here I am!"), postedAt))
+        posted(Post(Alice, Message("Here I am!"), postedAt))
         follower(Bob, following = Alice)
 
         val wallForBob = wall(Bob)
@@ -33,15 +33,15 @@ class InMemoryWallsSpec extends UnitSpec {
         wallForBob.posts(0) should be(Post(Alice, Message("Here I am!"), postedAt))
       }
 
-      "list user's and followed user's posts in reverse time order" in new InMemoryWalls {
+      "list user's and followed user's posts in reverse time order" in new TestInMemoryWalls {
         val alicePostedAt = new DateTime()
-        update(Post(Alice, Message("Here I am!"), alicePostedAt))
+        posted(Post(Alice, Message("Here I am!"), alicePostedAt))
 
         val charliePostedAt = alicePostedAt + 30.seconds
-        update(Post(Charlie, Message("What's going on today?"), charliePostedAt))
+        posted(Post(Charlie, Message("What's going on today?"), charliePostedAt))
 
         val bobPostedAt = alicePostedAt + 1.minute
-        update(Post(Bob, Message("I'm here too!"), bobPostedAt))
+        posted(Post(Bob, Message("I'm here too!"), bobPostedAt))
 
         follower(Charlie, following = Alice)
         follower(Charlie, following = Bob)
@@ -54,13 +54,14 @@ class InMemoryWallsSpec extends UnitSpec {
         wallForCharlie.posts(2) should be(Post(Alice, Message("Here I am!"), alicePostedAt))
       }
     }
+  }
 
-    "updated" should {
-      "add the updated to the users's wall when they are following now-one" in new InMemoryWalls {
-        val updateAt = new DateTime
-        val postForAlice = Post(Alice, Message("Hi there"), updateAt)
-        update(postForAlice) should be(Set(Wall(List(postForAlice))))
-      }
+  class TestInMemoryWalls extends InMemoryWalls {
+    val timeLines = InMemoryTimeLines()
+
+    override def posted(post: Post) = {
+      timeLines.posted(post)
+      super.posted(post)
     }
   }
 }

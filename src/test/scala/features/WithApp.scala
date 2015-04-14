@@ -4,7 +4,7 @@ import com.github.nscala_time.time.DurationBuilder
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
 import org.loudkicks.console._
-import org.loudkicks.service.{InMemoryWalls, InMemoryTimeLines, TestTime}
+import org.loudkicks.service.{PostDistributor, InMemoryWalls, InMemoryTimeLines, TestTime}
 
 trait WithApp {
   val time = TestTime()
@@ -22,9 +22,11 @@ trait WithApp {
 
     lazy val timeSource = WithApp.this.time
 
-    lazy val walls = InMemoryWalls()
+    lazy val timeLines = InMemoryTimeLines(timeSource)
 
-    lazy val timeLines = InMemoryTimeLines(subscriber = Some(walls), timeSource)
+    lazy val walls = InMemoryWalls(timeLines)
+
+    lazy val posts = PostDistributor(Seq(timeLines, walls), timeSource)
   }
 
   val parse = app.parse _

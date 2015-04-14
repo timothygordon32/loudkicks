@@ -50,26 +50,22 @@ class WallSpec extends UnitSpec {
     }
 
     "combining" should {
-      "commute for one empty operand" in {
-        val now = new DateTime
-        val postedNow = Post(Alice, Message("now"), now)
+      val now = new DateTime
+      val earlier = now - 1.second
+      val postedNow = Post(Alice, Message("now"), now)
+      val postedEarlier = Post(Bob, Message("earlier"), earlier)
 
-        Wall(List.empty) + Wall(List(postedNow)) should
-          be (Wall(List(postedNow)))
-        Wall(List(postedNow)) + Wall(List.empty) should
-          be (Wall(List(postedNow)))
+      "commute" in {
+        Wall(List(postedNow)) + TimeLine(List(postedEarlier)) should
+          be (Wall(List(postedNow, postedEarlier)))
+        Wall(List(postedEarlier)) + TimeLine(List(postedNow)) should
+          be (Wall(List(postedNow, postedEarlier)))
       }
 
-      "commute for non-empty operands" in {
-        val now = new DateTime
-        val earlier = now - 1.second
-        val postedNow = Post(Alice, Message("now"), now)
-        val postedEarlier = Post(Bob, Message("earlier"), earlier)
+      "drop duplicate posts" in {
+        Wall(List(postedNow, postedEarlier)) + TimeLine(List(postedEarlier)) should
+          be (Wall(List(postedNow, postedEarlier)))
 
-        Wall(List(postedNow)) + Wall(List(postedEarlier)) should
-          be (Wall(List(postedNow, postedEarlier)))
-        Wall(List(postedEarlier)) + Wall(List(postedNow)) should
-          be (Wall(List(postedNow, postedEarlier)))
       }
     }
   }

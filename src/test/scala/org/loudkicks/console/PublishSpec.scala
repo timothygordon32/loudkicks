@@ -2,7 +2,7 @@ package org.loudkicks.console
 
 import org.joda.time.DateTime
 import org.loudkicks._
-import org.loudkicks.service.{InMemoryTimeLines, TimeLines}
+import org.loudkicks.service._
 
 class PublishSpec extends UnitSpec {
 
@@ -10,21 +10,11 @@ class PublishSpec extends UnitSpec {
 
     "parsing a valid command line" should {
 
-      var posts: Seq[Post] = Seq.empty
-
       val postedAt = new DateTime
+      val time = TestTime(postedAt)
+      val subscriber = new TestSubscriber
 
-      val timeLines = new TimeLines {
-        def post(user: User, message: Message) = {
-          val post = Post(user, message, postedAt)
-          posts = posts :+ post
-          post
-        }
-
-        def read(user: User) = fail("Time lines should not be read")
-      }
-
-      val publish = Publish(timeLines)
+      val publish = Publish(PostDistributor(Seq(subscriber), time))
 
       "return a posted response for that user name and message" in {
         publish parse "Alice -> I love the weather today" should
@@ -35,15 +25,19 @@ class PublishSpec extends UnitSpec {
 
         publish parse "Alice -> I love the weather today"
 
-        posts should contain (Post(Alice, Message("I love the weather today"), postedAt))
+        subscriber.posts should contain (Post(Alice, Message("I love the weather today"), postedAt))
       }
     }
 
     "parsing a invalid command line" should {
       "ignore it" in {
-        val publish = Publish(InMemoryTimeLines(None))
+        val subscriber = new TestSubscriber
+
+        val publish = Publish(PostDistributor(Seq(subscriber), TestTime()))
 
         publish parse "Alice" should be(empty)
+
+        subscriber.posts should be(empty)
       }
     }
   }

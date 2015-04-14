@@ -1,13 +1,13 @@
 package org.loudkicks.console
 
-import org.loudkicks.service.{TimeLines, TimeSource, Walls}
+import org.loudkicks.service.{Posts, TimeLines, TimeSource, Walls}
 import org.loudkicks.{Message, Post, User}
 
 trait Command {
   def parse(line: String): Option[Response]
 }
 
-case class Publish(timeLines: TimeLines) extends Command {
+case class Publish(posts: Posts) extends Command {
   val valid = "^(.*) -> (.*)$".r
 
   def parse(line: String) = line match {
@@ -16,7 +16,7 @@ case class Publish(timeLines: TimeLines) extends Command {
     case _ => None
   }
 
-  def post(user: User, message: Message) = timeLines.post(user, message)
+  def post(user: User, message: Message) = posts.post(user, message)
 }
 
 case class ReadTimeLine(timeLines: TimeLines, timeSource: TimeSource) extends Command with EventFormatting {

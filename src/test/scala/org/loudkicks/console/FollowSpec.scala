@@ -42,6 +42,6 @@ class FollowSpec extends UnitSpec {
   }
 
   trait NoPostsShouldBeReceived extends PostSubscriber {
-    def update(post: Post) = fail("No posts should be received")
+    def posted(post: Post) = fail("No posts should be received")
   }
 }

@@ -10,7 +10,7 @@ class ReadTimeLineSpec extends UnitSpec {
   "ReadTimeLine" when {
     "parsing a invalid command line" should {
       "ignore it" in {
-        val read = ReadTimeLine(InMemoryTimeLines(None), TestTime())
+        val read = ReadTimeLine(InMemoryTimeLines(), TestTime())
 
         read parse "Alice unrecognised command" should be(empty)
       }
@@ -19,7 +19,8 @@ class ReadTimeLineSpec extends UnitSpec {
     "parsing an unknown user" should {
 
       val timeLines = new TimeLines {
-        def post(user: User, message: Message) = fail("Should not make any posts")
+
+        def posted(post: Post) = fail("Should not make any posts")
 
         def read(user: User) = {
           user should be(Zed)
@@ -42,7 +43,7 @@ class ReadTimeLineSpec extends UnitSpec {
       val secondPostAt = present - 1.minute
 
       val timeLines = new TimeLines {
-        def post(user: User, message: Message) = fail("Should not make any posts")
+        def posted(post: Post) = fail("Should not make any posts")
 
         def read(user: User) = {
           user should be(bob)

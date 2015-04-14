@@ -3,14 +3,14 @@ package org.loudkicks.console
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
 import org.loudkicks._
-import org.loudkicks.service.{InMemoryWalls, TestTime, Walls}
+import org.loudkicks.service.{InMemoryTimeLines, InMemoryWalls, TestTime, Walls}
 
 class ReadWallSpec extends UnitSpec {
 
   "ReadWall" when {
     "parsing a invalid command line" should {
       "ignore it" in {
-        val wall = ReadWall(InMemoryWalls(), TestTime())
+        val wall = ReadWall(InMemoryWalls(InMemoryTimeLines()), TestTime())
 
         wall parse "Alice" should be(empty)
       }
@@ -32,7 +32,7 @@ class ReadWallSpec extends UnitSpec {
             ))
           }
 
-          def update(post: Post) = fail("No updating should occur")
+          def posted(post: Post) = fail("No updating should occur")
 
           def follower(user: User, following: User) = fail("No following should be made")
         }

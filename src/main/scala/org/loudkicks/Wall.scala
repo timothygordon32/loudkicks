@@ -2,7 +2,11 @@ package org.loudkicks
 
 import com.github.nscala_time.time.Imports._
 
+import scala.collection.mutable
+
 case class Wall(posts: List[Post]) {
+  implicit val descendingTime = Ordering.fromLessThan[Post](_.when > _.when)
+
   def addRecent(post: Post): Wall = {
     val i = posts.indexWhere(_.when > post.when)
     val (before, after) = posts.splitAt(i + 1)
@@ -10,12 +14,11 @@ case class Wall(posts: List[Post]) {
     Wall(newPosts)
   }
 
-  def +(that: Wall): Wall =
-    if (this.posts.isEmpty) that
-    else if (that.posts.isEmpty) this
-    else {
-      val unsortedPosts = this.posts ++ that.posts
-      val posts = unsortedPosts.sortWith(_.when > _.when)
-      Wall(posts)
-    }
+  def +(timeLine: TimeLine): Wall = {
+    val sortedPosts = mutable.TreeSet.empty[Post]
+    sortedPosts ++= posts
+    sortedPosts ++= timeLine.posts
+
+    Wall(sortedPosts.toList)
+  }
 }

@@ -2,14 +2,14 @@ package org.loudkicks.service
 
 import org.loudkicks.{Post, User, Wall}
 
-class InMemoryWalls extends Walls {
+trait InMemoryWalls extends Walls {
   private var walls: Map[User, Wall] = Map.empty.withDefaultValue(Wall(List.empty))
   private var following: Map[User, Set[User]] = Map.empty.withDefaultValue(Set.empty)
 
-  def update(post: Post) = {
-    val updatedUserWall = update(post.user, post)
-    val updatedFollowerWalls = following(post.user).map(follower => update(follower, post))
-    updatedFollowerWalls + updatedUserWall
+  def timeLines: TimeLines
+
+  def posted(post: Post) = {
+    (following(post.user) + post.user).map(follower => update(follower, post))
   }
 
   def update(user: User, post: Post): Wall = {
@@ -25,7 +25,7 @@ class InMemoryWalls extends Walls {
     val updatedFollowing = this.following(user) + following
     this.following = this.following + (user -> updatedFollowing)
 
-    val newWall = wall(user) + wall(following)
+    val newWall = wall(user) + timeLines.read(following)
     walls = walls + (user -> newWall)
 
     updatedFollowing
@@ -33,5 +33,7 @@ class InMemoryWalls extends Walls {
 }
 
 object InMemoryWalls {
-  def apply() = new InMemoryWalls
+  def apply(tl: TimeLines) = new InMemoryWalls {
+    def timeLines = tl
+  }
 }

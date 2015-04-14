@@ -1,9 +1,7 @@
 package org.loudkicks.service
 
-import org.loudkicks.{TimeLine, Message, Post, User}
+import org.loudkicks.{TimeLine, User}
 
-trait TimeLines {
-  def post(user: User, message: Message): Post
-
+trait TimeLines extends PostSubscriber {
   def read(user: User): TimeLine
 }
