@@ -9,7 +9,7 @@ The console application is built using [SBT](http://www.scala-sbt.org/download.h
 
 Once JDK and SBT are installed and set up, clone the project into a directory, cd into it and then create an executable, using
 
-	$ git clone git@github.com:timothygordon32/loudkicks.git
+	$ git clone https://github.com/timothygordon32/loudkicks.git
 	$ cd loudkicks
 	$ sbt stage
 
