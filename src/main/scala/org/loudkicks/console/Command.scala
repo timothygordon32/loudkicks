@@ -34,7 +34,8 @@ case class Follow(walls: Walls) extends Command {
   val valid = "^(.*)? follows ([^ ]*)$".r
 
   def parse(line: String) = line match {
-    case valid(user, following) => val follower = User(user)
+    case valid(user, following) =>
+      val follower = User(user)
       Some(Subscriber(follower, walls.follower(follower, following = User(following))))
     case _ => None
   }

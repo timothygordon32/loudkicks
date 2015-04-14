@@ -16,4 +16,4 @@ case object Empty extends Empty
 
 case class Posted(post: Post) extends Empty
 
-case class Subscriber(user: User, following: Set[User]) extends Empty
+case class Subscriber(user: User, following: User) extends Empty

@@ -17,14 +17,14 @@ class FollowSpec extends UnitSpec {
         def follower(user: User, following: User) = {
           user should be(Bob)
           bobFollowing = bobFollowing + following
-          bobFollowing
+          following
         }
       }
       val follow = Follow(walls)
 
       "have one user follow another" in {
-        follow parse "Bob follows Alice" should contain (Subscriber(Bob, following = Set(Alice)))
-        follow parse "Bob follows Charlie" should contain (Subscriber(Bob, following = Set(Alice, Charlie)))
+        follow parse "Bob follows Alice" should contain (Subscriber(Bob, following = Alice))
+        follow parse "Bob follows Charlie" should contain (Subscriber(Bob, following = Charlie))
       }
     }
 

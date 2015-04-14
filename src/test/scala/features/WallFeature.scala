@@ -36,7 +36,7 @@ class WallFeature extends AcceptanceSpec {
 
     And("Charlie is following Alice")
     parse("Charlie follows Alice") should
-      be(Subscriber(Charlie, following = Set(Alice)))
+      be(Subscriber(Charlie, following = Alice))
 
     When("Charlie's wall is shown")
     val wall = in(thePresent).parse("Charlie wall")
@@ -70,9 +70,10 @@ class WallFeature extends AcceptanceSpec {
       be(Posted(Post(Bob, Message("Good game though."), thePast(1.minute))))
 
     And("Charlie follows both Alice and Bob")
-    parse("Charlie follows Alice")
+    parse("Charlie follows Alice") should
+      be(Subscriber(Charlie, following = Alice))
     parse("Charlie follows Bob") should
-      be(Subscriber(Charlie, following = Set(Alice, Bob)))
+      be(Subscriber(Charlie, following = Bob))
 
     When("Charlie's wall is displayed")
     val wall = in(thePresent).parse("Charlie wall")

@@ -6,12 +6,12 @@ import scala.collection.mutable
 
 trait InMemoryWalls extends Walls {
   private val walls: mutable.Map[User, Wall] = mutable.Map.empty.withDefaultValue(Wall(List.empty))
-  private val following: mutable.Map[User, Set[User]] = mutable.Map.empty.withDefaultValue(Set.empty)
+  private val followers: mutable.Map[User, Set[User]] = mutable.Map.empty.withDefaultValue(Set.empty)
 
   def timeLines: TimeLines
 
   def posted(post: Post) = {
-    (following(post.user) + post.user).map(follower => update(follower, post))
+    (followers(post.user) + post.user).map(follower => update(follower, post))
   }
 
   def update(user: User, post: Post): Wall = {
@@ -23,14 +23,14 @@ trait InMemoryWalls extends Walls {
 
   def wall(user: User): Wall = walls(user)
 
-  def follower(user: User, following: User): Set[User] = {
-    val updatedFollowing = this.following(user) + following
-    this.following += user -> updatedFollowing
+  def follower(user: User, following: User): User = {
+    val updatedFollowers = followers(following) + user
+    followers += following -> updatedFollowers
 
     val newWall = wall(user) + timeLines.read(following)
     walls += user -> newWall
 
-    updatedFollowing
+    following
   }
 }
 

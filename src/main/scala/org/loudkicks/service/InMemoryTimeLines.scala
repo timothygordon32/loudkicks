@@ -11,7 +11,7 @@ trait InMemoryTimeLines extends TimeLines {
 
   def posted(post: Post) = {
     val postsForUser = read(post.user).add(post)
-    timeLines += (post.user -> postsForUser)
+    timeLines += post.user -> postsForUser
   }
 
   def read(user: User) = timeLines(user)
