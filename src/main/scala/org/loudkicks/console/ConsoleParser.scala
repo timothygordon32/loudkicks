@@ -1,10 +1,17 @@
 package org.loudkicks.console
 
-trait ConsoleParser {
-  def commands: Seq[Command]
+import scala.util.parsing.combinator._
 
-  def parse(line: String) =
-    commands.foldLeft[Option[Response]](None) { (result, command) =>
-      result orElse command.parse(line)
-    } getOrElse Empty
+trait ConsoleParser extends RegexParsers {
+  def parsers: Seq[Parser[Command]]
+
+  def combine(ps: Seq[Parser[Command]]): Parser[Command] = {
+    if (ps.isEmpty) failure("No command found")
+    else ps.head | combine(ps.tail)
+  }
+
+  def parse(input: String): Response = parseAll(combine(parsers), input) match {
+    case Success(command, _) => command.execute
+    case _ => Empty
+  }
 }

@@ -6,7 +6,7 @@ import org.loudkicks.service.{PostDistributor, InMemoryWalls, InMemoryTimeLines,
 
 import scala.io.Source
 
-object Main extends App with ConsoleApp with ConsoleParser with AllCommands {
+object Main extends App with ConsoleApp with ConsoleParser with AllParsers {
   val prompt = "> "
   val input = Source.stdin.getLines()
   val output = new PrintWriter(System.out, true)
