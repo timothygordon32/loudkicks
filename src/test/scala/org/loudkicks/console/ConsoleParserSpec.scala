@@ -2,44 +2,40 @@ package org.loudkicks.console
 
 import org.loudkicks._
 
+import scala.util.parsing.combinator._
+
 class ConsoleParserSpec extends UnitSpec {
 
-  object IgnoringCommand extends Command {
-    def parse(line: String) = None
-  }
-
-  object AcceptingCommand extends Command {
-    def parse(line: String) = Some(Lines(Seq("accepted")))
-  }
-
   "ConsoleParser" when {
-    "without any commands" should {
-      "return empty response" in new ConsoleParser {
-        val commands = Seq.empty
+    "has no parsers" should {
+      "return None" in new ConsoleParser {
+        val parsers = Seq.empty
 
         parse("anything") should be(Empty)
       }
     }
 
-    "with a command that ignores the input" should {
-      "return an empty response" in new ConsoleParser {
-        val commands = Seq(IgnoringCommand)
+    "has a literal parser" should {
+      "return a response to a match" in new TestConsoleParser {
+        val parsers = Seq(literal)
 
-        parse("anything") should be(Empty)
+        parse("anything") should be(Lines(Seq("accepted")))
       }
     }
 
-    "with a command that accepts the input" should {
-      "return the response of the only accepting command" in new ConsoleParser {
-        val commands = Seq(AcceptingCommand)
+    "with a literal parser" should {
+      "return None with no match" in new TestConsoleParser {
+        val parsers = Seq(literal)
 
-        parse("anything") should be(Lines(Seq("accepted")))
+        parse("something") should be(Empty)
       }
+    }
+  }
 
-      "return the response of the first accepting command" in new ConsoleParser {
-        val commands = Seq(IgnoringCommand, AcceptingCommand)
-
-        parse("anything") should be(Lines(Seq("accepted")))
+  trait TestConsoleParser extends ConsoleParser {
+    def literal: Parser[Command] = "anything" ^^ { case _ =>
+      new Command {
+        def execute = Lines(Seq("accepted"))
       }
     }
   }

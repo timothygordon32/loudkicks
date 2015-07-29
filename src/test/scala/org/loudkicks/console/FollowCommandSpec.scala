@@ -3,9 +3,9 @@ package org.loudkicks.console
 import org.loudkicks._
 import org.loudkicks.service.{PostSubscriber, Walls}
 
-class FollowSpec extends UnitSpec {
+class FollowCommandSpec extends UnitSpec {
 
-  "Follow" when {
+  "FollowCommand" when {
 
     "parsing a valid command line" should {
 
@@ -20,23 +20,11 @@ class FollowSpec extends UnitSpec {
           following
         }
       }
-      val follow = Follow(walls)
 
       "have one user follow another" in {
-        follow parse "Bob follows Alice" should contain (Subscriber(Bob, following = Alice))
-        follow parse "Bob follows Charlie" should contain (Subscriber(Bob, following = Charlie))
-      }
-    }
-
-    "parsing a invalid command line" should {
-      "ignore it" in {
-        val walls = new Walls with NoPostsShouldBeReceived  {
-          def wall(user: User) = fail("No wall should be accessed")
-
-          def follower(user: User, following: User) = fail("No following should occur")
-        }
-
-        Follow(walls) parse "Alice" should be(empty)
+        FollowCommand(Bob, following = Alice, walls).execute should be (Subscriber(Bob, following = Alice))
+        FollowCommand(Bob, following = Charlie, walls).execute should be (Subscriber(Bob, following = Charlie))
+        bobFollowing should contain allOf(Alice, Charlie)
       }
     }
   }

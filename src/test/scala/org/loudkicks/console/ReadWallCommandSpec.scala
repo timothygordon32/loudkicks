@@ -3,20 +3,12 @@ package org.loudkicks.console
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
 import org.loudkicks._
-import org.loudkicks.service.{InMemoryTimeLines, InMemoryWalls, TestTime, Walls}
+import org.loudkicks.service.{TestTime, Walls}
 
-class ReadWallSpec extends UnitSpec {
+class ReadWallCommandSpec extends UnitSpec {
 
-  "ReadWall" when {
-    "parsing a invalid command line" should {
-      "ignore it" in {
-        val wall = ReadWall(InMemoryWalls(InMemoryTimeLines()), TestTime())
-
-        wall parse "Alice" should be(empty)
-      }
-    }
-
-    "parsing a matched line" should {
+  "ReadWallCommand" when {
+    "executing" should {
       "output the posts for the wall" in {
 
         val present = new DateTime
@@ -36,9 +28,9 @@ class ReadWallSpec extends UnitSpec {
 
           def follower(user: User, following: User) = fail("No following should be made")
         }
-        val readWall = ReadWall(walls, TestTime(present))
+        val readWall = ReadWallCommand(Bob, walls, TestTime(present))
 
-        inside(readWall parse "Bob wall") { case Some(Lines(lines)) =>
+        inside(readWall.execute) { case Lines(lines) =>
           lines should be(Seq(
             "Bob - Too cold for me. (1 minute ago)",
             "Alice - I really like the weather today! (10 minutes ago)"

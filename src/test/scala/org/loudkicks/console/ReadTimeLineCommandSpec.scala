@@ -3,20 +3,12 @@ package org.loudkicks.console
 import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
 import org.loudkicks._
-import org.loudkicks.service.{InMemoryTimeLines, TestTime, TimeLines}
+import org.loudkicks.service.{TestTime, TimeLines}
 
-class ReadTimeLineSpec extends UnitSpec {
+class ReadTimeLineCommandSpec extends UnitSpec {
 
   "ReadTimeLine" when {
-    "parsing a invalid command line" should {
-      "ignore it" in {
-        val read = ReadTimeLine(InMemoryTimeLines(), TestTime())
-
-        read parse "Alice unrecognised command" should be(empty)
-      }
-    }
-
-    "parsing an unknown user" should {
+    "reading time line user with no posts" should {
 
       val timeLines = new TimeLines {
 
@@ -27,16 +19,16 @@ class ReadTimeLineSpec extends UnitSpec {
           TimeLine(List.empty)
         }
       }
-      val read = ReadTimeLine(timeLines, TestTime())
+      val read = ReadTimeLineCommand(Zed, timeLines, TestTime())
 
       "respond with an empty list of messages" in {
-        inside(read parse "Zed") { case Some(Lines(lines)) =>
+        inside(read.execute) { case Lines(lines) =>
           lines should be(empty)
         }
       }
     }
 
-    "parsing an known user" should {
+    "reading a known user" should {
       val bob = Bob
       val present = new DateTime
       val firstPostAt = present - 10.minute
@@ -54,10 +46,10 @@ class ReadTimeLineSpec extends UnitSpec {
         }
       }
 
-      val read = new ReadTimeLine(timeLines, TestTime())
+      val read = new ReadTimeLineCommand(Bob, timeLines, TestTime())
 
       "respond with messages" in {
-        inside(read parse "Bob") { case Some(Lines(lines)) =>
+        inside(read.execute) { case Lines(lines) =>
           lines should be(Seq(
             "Good game, though. (1 minute ago)",
             "Damn! We lost! (10 minutes ago)"

@@ -18,7 +18,7 @@ trait WithApp {
 
   def thePast(elapsed: DurationBuilder): DateTime = thePresent - elapsed
 
-  private val app = new ConsoleParser with AllCommands {
+  private val app = new ConsoleParser with AllParsers {
 
     lazy val timeSource = WithApp.this.time
 
